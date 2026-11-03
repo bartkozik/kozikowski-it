@@ -68,3 +68,12 @@ test('production and credential-bearing URLs cannot be fetched', () => {
   assert.throws(() => requireLocalUrl('http://name:secret@127.0.0.1:3100/'));
   assert.equal(requireLocalUrl('http://127.0.0.1:3100/').hostname, '127.0.0.1');
 });
+
+test('build timestamp belongs to a successful build, never to the page audit', () => {
+  const build = { durationSeconds: 8, exitCode: 0, recordedAt: '2026-11-03T09:30:00.000Z' };
+  const measured = createMeasurement(report, null, build);
+  assert.equal(measured.recordedAt, report.fetchTime);
+  assert.equal(measured.buildRecordedAt, build.recordedAt);
+  assert.equal(createMeasurement(report, null, { ...build, exitCode: 1 }).buildRecordedAt, null);
+  assert.equal(createMeasurement(report, null, { durationSeconds: 8, exitCode: 0 }).buildRecordedAt, null);
+});

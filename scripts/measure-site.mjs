@@ -108,6 +108,7 @@ export function createMeasurement(report, javascriptGzip, build) {
   if (Array.isArray(report.runWarnings)) notes.push(...report.runWarnings);
   return {
     recordedAt: report.fetchTime ?? null,
+    buildRecordedAt: buildTime !== null ? (build.recordedAt ?? null) : null,
     environment: 'Local production build (localhost)',
     target: target.href,
     profile: profile || null,

@@ -21,6 +21,7 @@ export interface SiteMetricDefinition {
 
 export interface SiteMeasurement {
   readonly recordedAt: string | null;
+  readonly buildRecordedAt: string | null;
   readonly environment: string | null;
   readonly target: string | null;
   readonly profile: string | null;
@@ -96,6 +97,7 @@ export const siteMetricDefinitions: readonly SiteMetricDefinition[] = [
 
 export const siteMetrics: SiteMeasurement = {
   recordedAt: '2026-11-03T10:31:26.610Z',
+  buildRecordedAt: '2026-11-03T10:08:06.101785+00:00',
   environment: 'Local production build (localhost)',
   target: 'http://127.0.0.1:3100/',
   profile:
