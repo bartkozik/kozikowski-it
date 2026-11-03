@@ -3,12 +3,15 @@
 Each pull request delivers one coherent part of the portfolio. Keep handwritten changes focused; identify generated lockfile changes separately in the PR description.
 
 1. **Foundation:** Next.js, TypeScript, SCSS Modules, local development and quality checks. The initial Home is a neutral scaffold, not the Figma implementation.
-2. **Home layout:** the Updated/Home Figma frame, original assets, design tokens, navigation and responsive card composition. Extract exact design context before implementation.
-3. **Card interactions:** dragging by the title bar, active stacking order, bounded positions, click/drag separation, Shuffle/reset, keyboard access and reduced motion. Add behavior tests here.
-4. **Project details:** one typed project registry, individual URLs, accurate responsibilities, code/case-study links, About, CV, contact and metadata. Cover routing and link behavior.
-5. **Metrics and polish:** the red strip from Figma Content, measured values with date/environment, mobile verification, accessibility and performance. Sample Figma numbers are not measurements.
+2. **Project catalog:** canonical project names and verified public resources, replacing historical Figma names and hidden duplicate repositories. Data only; the Home scaffold remains unchanged.
+3. **Home layout:** the Updated/Home Figma frame, original assets, design tokens, navigation and responsive card composition. Use the project catalog for card and menu content. Extract exact design context before implementation.
+4. **Card interactions:** dragging by the title bar, active stacking order, bounded positions, click/drag separation, Shuffle/reset, keyboard access and reduced motion. Add behavior tests here.
+5. **Project details:** extend the project registry with accurate responsibilities and case-study content; add individual URLs, About, CV, contact and metadata. Cover routing and link behavior.
+6. **Metrics and polish:** the red strip from Figma Content, measured values with date/environment, mobile verification, accessibility and performance. Sample Figma numbers are not measurements.
 
-The Content frame starts with Accounting SaaS, Board.Dev, Creative Platform, Art Network, EPOCA, Liquid Editions and EPOCA LP. Include PM Traffic Manager and CELINA from the later brief. EPOCA is one project with frontend/backend links; its landing page is separate.
+The Figma names and links predate the public source publication. Use `src/core/content/projects.ts` as the canonical catalog rather than copying those historical labels into the UI. It includes the original selection and PM Traffic Manager, CELINA and FaniMani from the current portfolio. EPOCA is one project with frontend/backend links; its landing page is separate. Board.Dev exposes only the approved public frontend.
+
+Resources distinguish `source` from `case-study`, so a README-only repository is not presented as application source. Accounting and advertising projects retain descriptive names where a public client/product name has not been established. Leave demo URLs absent until the applications are available. The portfolio itself can be added as a case study once its implementation is complete.
 
 ## Review workflow
 

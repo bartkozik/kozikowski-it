@@ -36,6 +36,7 @@ The quality workflow runs these checks on pull requests and changes to `main`. I
 ```text
 src/app/                     App Router entry points, layout and metadata
 src/core/modules/Home/       Home component, SCSS Module and public export
+src/core/content/projects.ts Canonical project names and public resources
 src/core/theme/              Shared SCSS tokens and global styles
 .github/workflows/ci.yml     Quality checks
 docs/review-plan.md          Small PR boundaries and review workflow
@@ -48,6 +49,8 @@ Development and production builds explicitly use Next.js's supported Webpack opt
 Next.js supports ESLint 10, but some bundled plugins still declare peer ranges ending at ESLint 9. npm may print peer-range warnings during installation. The lockfile installation and lint command are checked independently; no `--force` or `--legacy-peer-deps` flags are required.
 
 ## Code review
+
+The project catalog contains the names and links for the future cards, navigation and project pages. It groups EPOCA's two source repositories into one product and keeps its landing page separate. `source` resources point to application code; `case-study` resources point to the public descriptions. The Home scaffold does not render the catalog yet.
 
 See the [review plan](docs/review-plan.md). Each feature branch becomes a focused PR with local review instructions and verification results. Pull requests stay open for Bartosz's review; they are not merged automatically.
 
