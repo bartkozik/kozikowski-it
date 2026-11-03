@@ -13,13 +13,20 @@ export function PunkRadio() {
 }
 
 function RadioReceiver() {
-  const [enabled, setEnabled] = useState(false);
+  const [view, setView] = useState<'closed' | 'expanded' | 'minimized'>('closed');
+  const enabled = view !== 'closed';
+  const minimized = view === 'minimized';
   const [showTracks, setShowTracks] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
 
   function disconnect() {
-    setEnabled(false);
+    setView('closed');
     setShowTracks(false);
+    trigger.current?.focus();
+  }
+
+  function minimize() {
+    setView('minimized');
     trigger.current?.focus();
   }
 
@@ -30,42 +37,53 @@ function RadioReceiver() {
       onKeyDown={(event) => {
         if (event.key === 'Escape' && enabled) {
           event.preventDefault();
-          disconnect();
+          minimize();
         }
       }}
     >
-      <div id="punk-radio-player" className={styles.panel} hidden={!enabled}>
+      <div id="punk-radio-player" className={styles.panel} hidden={!enabled} data-minimized={minimized || undefined}>
         {enabled && (
           <>
-            <header className={styles.header}>
+            <header className={styles.header} hidden={minimized}>
               <div>
                 <span className={styles.serial}>RX—01 / UNLICENSED HARDWARE</span>
                 <h2>
                   PIRATE FREQUENCY<span>_</span>
                 </h2>
               </div>
-              <button
-                className={styles.close}
-                type="button"
-                onClick={disconnect}
-                aria-label="Close radio and stop playback"
-              >
-                ×
-              </button>
+              <div className={styles.windowControls}>
+                <button
+                  className={styles.close}
+                  type="button"
+                  onClick={minimize}
+                  aria-label="Minimize radio"
+                  title="Minimize radio"
+                >
+                  −
+                </button>
+                <button
+                  className={styles.close}
+                  type="button"
+                  onClick={disconnect}
+                  aria-label="Close radio and stop playback"
+                >
+                  ×
+                </button>
+              </div>
             </header>
-            <div className={styles.tuner} aria-hidden="true">
+            <div className={styles.tuner} aria-hidden="true" hidden={minimized}>
               <span /> <b>2077</b>
             </div>
             <iframe
               title="Spotify — Cyberpunk 2077 Official Playlist"
               src={`https://open.spotify.com/embed/playlist/${playlistId}?theme=0`}
               width="100%"
-              height={showTracks ? 352 : 152}
+              height={minimized ? 80 : showTracks ? 352 : 152}
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
               allowFullScreen
               className={styles.player}
             />
-            <div className={styles.controls}>
+            <div className={styles.controls} hidden={minimized}>
               <button type="button" aria-pressed={showTracks} onClick={() => setShowTracks((current) => !current)}>
                 {showTracks ? '− Hide tracklist' : '+ Tracklist'}
               </button>
@@ -73,29 +91,35 @@ function RadioReceiver() {
                 Spotify ↗
               </a>
             </div>
-            <p className={styles.note}>Manual ignition. Spotify may offer previews.</p>
           </>
         )}
       </div>
-      <button
-        ref={trigger}
-        className={styles.trigger}
-        type="button"
-        aria-label="Pirate radio"
-        aria-expanded={enabled}
-        aria-controls="punk-radio-player"
-        onClick={() => (enabled ? disconnect() : setEnabled(true))}
-      >
-        <span className={styles.icon} aria-hidden="true">
-          ↯
-        </span>
-        <span>
-          RADIO<span className={styles.channel}> / CH.01</span>
-        </span>
-        <span className={styles.indicator} aria-hidden="true">
-          {enabled ? '×' : '+'}
-        </span>
-      </button>
+      <div className={styles.dock}>
+        <button
+          ref={trigger}
+          className={styles.trigger}
+          type="button"
+          aria-label={view === 'closed' ? 'Pirate radio' : minimized ? 'Expand radio' : 'Minimize radio'}
+          aria-expanded={view === 'expanded'}
+          aria-controls="punk-radio-player"
+          onClick={() => (view === 'expanded' ? minimize() : setView('expanded'))}
+        >
+          <span className={styles.icon} aria-hidden="true">
+            ↯
+          </span>
+          <span>
+            RADIO<span className={styles.channel}> / CH.01</span>
+          </span>
+          <span className={styles.indicator} aria-hidden="true">
+            {view === 'expanded' ? '−' : '+'}
+          </span>
+        </button>
+        {enabled && (
+          <button type="button" className={styles.stop} onClick={disconnect} aria-label="Stop radio" title="Stop radio">
+            <span aria-hidden="true">■</span>
+          </button>
+        )}
+      </div>
     </aside>
   );
 }

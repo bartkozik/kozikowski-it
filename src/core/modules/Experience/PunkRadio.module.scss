@@ -145,12 +145,6 @@
     }
   }
 }
-.note {
-  margin: 0;
-  color: theme.$color-muted;
-  font-size: 9px;
-  line-height: 1.5;
-}
 @media (max-width: 699px) {
   .radio {
     right: 8px;
@@ -173,4 +167,38 @@
   .radio {
     display: none;
   }
+}
+
+.dock,
+.windowControls {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.windowControls {
+  flex-shrink: 0;
+  button {
+    width: 44px;
+  }
+}
+.stop {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--neon-pink);
+  background: #120e1f;
+  color: var(--neon-pink);
+  box-shadow: 3px 3px 0 #ff70d280;
+  cursor: pointer;
+  &:hover {
+    color: #0b0712;
+    background: var(--neon-pink);
+  }
+}
+.panel[data-minimized] {
+  padding: 3px;
+}
+.header[hidden],
+.controls[hidden],
+.tuner[hidden] {
+  display: none;
 }
