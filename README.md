@@ -39,7 +39,6 @@ src/core/modules/Home/       Home component, SCSS Module and public export
 src/core/content/projects.ts Canonical project names and public resources
 src/core/theme/              Shared SCSS tokens and global styles
 .github/workflows/ci.yml     Quality checks
-docs/review-plan.md          Small PR boundaries and review workflow
 ```
 
 The structure follows EPOCA LP conventions: thin routes, feature modules, colocated SCSS Modules, shared theme and the `@/` source alias. The foundation uses current dependencies and a system font. Design-specific assets and typography belong to the Home layout PR.
@@ -52,7 +51,7 @@ Next.js supports ESLint 10, but some bundled plugins still declare peer ranges e
 
 The project catalog contains the names and links for the future cards, navigation and project pages. It groups EPOCA's two source repositories into one product and keeps its landing page separate. `source` resources point to application code; `case-study` resources point to the public descriptions. The Home scaffold does not render the catalog yet.
 
-See the [review plan](docs/review-plan.md). Each feature branch becomes a focused PR with local review instructions and verification results. Pull requests stay open for Bartosz's review; they are not merged automatically.
+Each feature branch becomes a focused PR with local review instructions and verification results. Pull requests stay open for Bartosz's review; they are not merged automatically.
 
 No environment variables or credentials are needed for the foundation. Keep secrets, client data and unapproved screenshots out of this public repository.
 

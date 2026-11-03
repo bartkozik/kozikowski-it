@@ -14,9 +14,6 @@ export interface PortfolioProject {
   readonly demoUrl?: `https://${string}`;
 }
 
-// One entry per product, regardless of how many repositories contain its source.
-// Resources were checked against the public GitHub portfolio on 2026-11-03.
-// Add demoUrl only after the deployed destination has been verified.
 export const projects: readonly PortfolioProject[] = [
   {
     slug: 'pm-traffic-manager',
