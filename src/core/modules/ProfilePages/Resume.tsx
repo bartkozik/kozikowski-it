@@ -1,4 +1,6 @@
 import { profile } from '@/core/content/profile';
+import { punkProfileCopy } from '@/core/content/punk-profile-copy';
+import { ModeCopy } from '@/core/modules/Experience/ModeCopy';
 
 import { ProfileLinks } from './ProfileLinks';
 import { ProfilePageShell } from './ProfilePageShell';
@@ -6,7 +8,11 @@ import styles from './ProfilePages.module.scss';
 
 export function Resume() {
   return (
-    <ProfilePageShell title="Resume" subtitle={`${profile.name} · ${profile.title}`} activePage="resume">
+    <ProfilePageShell
+      title={<ModeCopy punk="Operator dossier">Resume</ModeCopy>}
+      subtitle={`${profile.name} · ${profile.title}`}
+      activePage="resume"
+    >
       <div className={styles.resumeToolbar}>
         <a href={profile.contactHref}>{profile.email}</a>
         <a
@@ -25,12 +31,18 @@ export function Resume() {
       <ProfileLinks />
 
       <section className={styles.section} aria-labelledby="summary-heading">
-        <h2 id="summary-heading">Profile</h2>
-        <p>{profile.about[0]}</p>
+        <h2 id="summary-heading">
+          <ModeCopy punk="Operator briefing">Profile</ModeCopy>
+        </h2>
+        <p>
+          <ModeCopy punk={punkProfileCopy.about[0]}>{profile.about[0]}</ModeCopy>
+        </p>
       </section>
 
       <section className={styles.section} aria-labelledby="resume-experience-heading">
-        <h2 id="resume-experience-heading">Experience</h2>
+        <h2 id="resume-experience-heading">
+          <ModeCopy punk="Contract history">Experience</ModeCopy>
+        </h2>
         <div className={styles.experience}>
           {profile.experience.map((experience) => (
             <article key={experience.company} className={styles.experienceItem}>
@@ -39,10 +51,18 @@ export function Resume() {
                 <p className={styles.eyebrow}>{experience.period}</p>
               </div>
               <p className={styles.role}>{experience.title}</p>
-              <p>{experience.description}</p>
+              <p>
+                <ModeCopy punk={punkProfileCopy.experience[experience.company]?.description}>
+                  {experience.description}
+                </ModeCopy>
+              </p>
               <ul className={styles.highlights}>
-                {experience.highlights.map((highlight) => (
-                  <li key={highlight}>{highlight}</li>
+                {experience.highlights.map((highlight, index) => (
+                  <li key={highlight}>
+                    <ModeCopy punk={punkProfileCopy.experience[experience.company]?.highlights[index]}>
+                      {highlight}
+                    </ModeCopy>
+                  </li>
                 ))}
               </ul>
             </article>
@@ -51,7 +71,9 @@ export function Resume() {
       </section>
 
       <section className={styles.section} aria-labelledby="skills-heading">
-        <h2 id="skills-heading">Technical skills</h2>
+        <h2 id="skills-heading">
+          <ModeCopy punk="Installed loadout">Technical skills</ModeCopy>
+        </h2>
         <dl className={styles.skills}>
           {profile.skills.map((group) => (
             <div key={group.category}>
@@ -63,14 +85,18 @@ export function Resume() {
       </section>
 
       <section className={styles.section} aria-labelledby="education-heading">
-        <h2 id="education-heading">Education & training</h2>
+        <h2 id="education-heading">
+          <ModeCopy punk="Training archives">Education & training</ModeCopy>
+        </h2>
         <div className={styles.education}>
           {profile.education.map((education) => (
             <article key={education.institution}>
               <p className={styles.eyebrow}>{education.period}</p>
               <h3>{education.institution}</h3>
               <p className={styles.role}>{education.course}</p>
-              <p>{education.description}</p>
+              <p>
+                <ModeCopy punk={punkProfileCopy.education[education.institution]}>{education.description}</ModeCopy>
+              </p>
             </article>
           ))}
         </div>

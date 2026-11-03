@@ -14,11 +14,10 @@ export function AboutPortrait() {
     <figure className={styles.portrait} data-punk={punk || undefined}>
       <div className={styles.label} aria-hidden="true">
         <span>{punk ? 'OPERATOR / BK—01' : 'HELLO, I’M BARTOSZ'}</span>
-        <span>{punk ? '↯' : '↗'}</span>
       </div>
       <div className={styles.imageFrame}>
         <Image
-          src={punk ? '/images/profile/bartosz-punk.webp' : '/images/profile/bartosz.webp'}
+          src={punk ? '/images/profile/bartosz-punk.webp' : '/images/profile/bartosz-cutout.webp'}
           alt={
             punk
               ? 'Cyberpunk portrait of Bartosz Kozikowski with neon lighting and a temple implant'

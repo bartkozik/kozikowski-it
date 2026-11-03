@@ -7,7 +7,6 @@
   border: 1px solid theme.$color-border;
   background: theme.$color-card;
   box-shadow: 6px 6px 0 theme.$color-border;
-  transform: rotate(-2deg);
 }
 
 .label,
@@ -79,7 +78,8 @@
 }
 
 @media print {
-  .portrait {
+  .portrait,
+  .portrait[data-punk] {
     box-shadow: none;
     transform: none;
     break-inside: avoid;

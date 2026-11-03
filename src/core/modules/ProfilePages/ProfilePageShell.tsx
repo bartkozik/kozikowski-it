@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import styles from './ProfilePages.module.scss';
 
 interface ProfilePageShellProps {
-  readonly title: string;
+  readonly title: ReactNode;
   readonly subtitle: string;
   readonly activePage?: 'about' | 'resume' | 'contact';
   readonly children: ReactNode;
