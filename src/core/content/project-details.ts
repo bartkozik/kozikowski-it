@@ -57,7 +57,8 @@ export const projectDetails: readonly ProjectDetails[] = [
     ],
     challenge:
       'Give the client flexible editing without losing the intended layout or breaking previously saved content, across both Gutenberg and the public website.',
-    status: 'Delivered website. A sanitized source snapshot includes the custom theme, blocks and editing workflows.',
+    status:
+      'Implementation completed and deployed to the client’s staging site. The website is awaiting publication by the client. A sanitized source snapshot includes the custom theme, blocks and editing workflows.',
   },
   {
     slug: 'board-dev',

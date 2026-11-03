@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import type { ProjectDetails as ProjectDetailsContent } from '@/core/content/project-details';
+import { getProjectGallery } from '@/core/content/project-galleries';
 import { getProjectVisual } from '@/core/content/project-visuals';
 import type { PortfolioProject } from '@/core/content/projects';
 
@@ -24,6 +25,7 @@ const sections = [
 
 export function ProjectDetails({ project, details, nextProject }: ProjectDetailsProps) {
   const visual = getProjectVisual(project.slug);
+  const gallery = getProjectGallery(project.slug);
 
   return (
     <main className={styles.page} id="main-content">
@@ -84,6 +86,19 @@ export function ProjectDetails({ project, details, nextProject }: ProjectDetails
               ))}
             </ul>
           </section>
+
+          {gallery.map((image) => (
+            <figure key={image.src} className={styles.visual}>
+              <Image
+                src={image.src}
+                alt={image.alt}
+                width={image.width}
+                height={image.height}
+                sizes="(max-width: 950px) calc(100vw - 40px), 910px"
+                className={styles.projectImage}
+              />
+            </figure>
+          ))}
 
           <section className={styles.section} id="challenge" aria-labelledby="challenge-heading">
             <h2 id="challenge-heading">The challenge</h2>

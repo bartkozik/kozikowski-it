@@ -2,6 +2,7 @@ import accountingUiPrototypeImage from '../../../public/projects/accounting-ui-p
 import adTemplatePlatformImage from '../../../public/projects/ad-template-platform.webp';
 import artNetworkImage from '../../../public/projects/art-network.webp';
 import boardDevImage from '../../../public/projects/board-dev.webp';
+import celinaHomeImage from '../../../public/projects/celina-home.webp';
 import epocaImage from '../../../public/projects/epoca.webp';
 import epocaLandingPageImage from '../../../public/projects/epoca-landing-page.webp';
 import fanimaniImage from '../../../public/projects/fanimani.webp';
@@ -16,6 +17,10 @@ export interface ProjectVisual {
 }
 
 const visuals: Readonly<Record<string, ProjectVisual>> = {
+  celina: {
+    ...celinaHomeImage,
+    alt: 'CELINA corporate website home page showing its manufacturing and shelter products',
+  },
   'art-network': {
     ...artNetworkImage,
     alt: 'Art Network banking and invoice interface',

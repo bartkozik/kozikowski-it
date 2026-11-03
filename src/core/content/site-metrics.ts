@@ -95,7 +95,7 @@ export const siteMetricDefinitions: readonly SiteMetricDefinition[] = [
 ];
 
 export const siteMetrics: SiteMeasurement = {
-  recordedAt: '2026-11-03T10:23:10.209Z',
+  recordedAt: '2026-11-03T10:31:26.610Z',
   environment: 'Local production build (localhost)',
   target: 'http://127.0.0.1:3100/',
   profile:
@@ -107,17 +107,17 @@ export const siteMetrics: SiteMeasurement = {
     'TTFB uses the observed time-to-first-byte subpart from the Lighthouse LCP breakdown. Load time uses its observed loadEventEnd timing.',
     'Page weight is Lighthouse total-byte-weight for this navigation. JS gzip sums unique successfully loaded same-origin script responses compressed independently with gzip level 9; it excludes other routes, third-party scripts and response headers.',
     'Build: Next.js production build with existing compiler cache; measured at 2026-11-03T10:08:06.101785+00:00.',
-    'Lighthouse report SHA-256: 03da08cea6a2e684ab512ed7ceea917378adf05eb38b8ba7f22fbdea0e0d0996.',
+    'Lighthouse report SHA-256: 581cbb18d5ed903426fdd8dc763e63baab4ccadeab10fc748b00e39c1e91bc4f.',
   ],
   evidence: [],
   values: {
-    ttfb: 246.64099999809264,
-    fcp: 1213,
-    loadTime: 474,
-    pageWeight: 519998,
-    javascriptGzip: 154326,
+    ttfb: 10.89,
+    fcp: 109,
+    loadTime: 124,
+    pageWeight: 541536,
+    javascriptGzip: 154655,
     buildTime: 8.069,
-    lighthousePerformance: 99,
+    lighthousePerformance: 100,
     lighthouseAccessibility: 100,
     lighthouseSeo: 100,
     lighthouseBestPractices: 100,
