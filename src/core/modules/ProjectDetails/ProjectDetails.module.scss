@@ -135,6 +135,10 @@
 
 .visual {
   margin: 32px 0 0;
+  &:first-child {
+    margin-top: 0;
+    margin-bottom: 32px;
+  }
 }
 
 .projectImage {

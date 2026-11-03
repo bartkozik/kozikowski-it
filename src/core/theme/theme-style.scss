@@ -135,3 +135,58 @@ html {
     background-image: none;
   }
 }
+
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-group(.project-expand),
+::view-transition-group(.project-title),
+::view-transition-group(.project-image) {
+  animation-duration: 520ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-old(.project-expand) {
+  animation: project-dissolve 180ms ease-out both;
+}
+
+::view-transition-new(.project-expand) {
+  animation: project-reveal 320ms ease-out 100ms both;
+}
+
+::view-transition-image-pair(.project-image) {
+  overflow: hidden;
+}
+
+::view-transition-old(.project-image),
+::view-transition-new(.project-image) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+@keyframes project-dissolve {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes project-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}

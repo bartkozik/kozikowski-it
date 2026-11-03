@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import {
+  ViewTransition,
   useCallback,
   useEffect,
   useRef,
@@ -350,83 +351,95 @@ export function Home() {
                 zIndex: highlightedProject === project.slug ? cardPresets.length + 1 : order.indexOf(index) + 1,
               } as CSSProperties;
               return (
-                <article
-                  className={styles.card}
+                <ViewTransition
                   key={project.slug}
-                  ref={(element) => {
-                    cards.current[index] = element;
-                  }}
-                  style={cardStyle}
-                  data-installed={(punk && loadout.installed.includes(project.slug)) || undefined}
-                  data-highlighted={highlightedProject === project.slug || undefined}
-                  onAnimationEnd={(event) => {
-                    if (event.target === event.currentTarget && index === cardPresets.length - 1)
-                      setEntranceComplete(true);
-                  }}
-                  data-muted={(highlightedProject !== null && highlightedProject !== project.slug) || undefined}
-                  onPointerEnter={(event) => {
-                    if (event.pointerType !== 'touch') setHoveredProject(project.slug);
-                  }}
-                  onPointerLeave={() => setHoveredProject(null)}
-                  onFocus={(event) => {
-                    bringToFront(index);
-                    if (event.target instanceof HTMLElement && event.target.matches(':focus-visible'))
-                      setFocusedProject(project.slug);
-                  }}
-                  onBlur={() => setFocusedProject(null)}
+                  name={`project-${project.slug}`}
+                  share="project-expand"
+                  default="none"
                 >
-                  <div className={styles.cardHeader}>
-                    <Link
-                      className={styles.cardTitle}
-                      href={`/projects/${project.slug}`}
-                      aria-describedby="card-instructions"
-                      onPointerDown={(event) => beginDrag(event, index)}
-                      onPointerMove={moveCard}
-                      onPointerUp={(event) => endDrag(event)}
-                      onPointerCancel={(event) => endDrag(event, true)}
-                      onLostPointerCapture={(event) => endDrag(event, true)}
-                      onDragStart={(event) => event.preventDefault()}
-                      onKeyDown={(event) => keyboardMove(event, index)}
-                      onClick={(event) => {
-                        if (clickGuard.consume(index, event.detail)) event.preventDefault();
-                      }}
-                    >
-                      {project.name}
-                    </Link>
-                    <Image src="/assets/arrow-right-up.svg" width={24} height={24} alt="" />
-                  </div>
-                  <p className={styles.tagline}>
-                    {(punk && getPunkProjectCopy(project.slug)?.tagline) || project.tagline}
-                  </p>
-                  <Link className={styles.preview} href={`/projects/${project.slug}`} tabIndex={-1}>
-                    {visual ? (
-                      <Image
-                        src={visual.src}
-                        alt={visual.alt}
-                        width={visual.width}
-                        height={visual.height}
-                        sizes="(max-width: 699px) 90vw, (max-width: 1099px) 45vw, 30vw"
-                        draggable={false}
-                        loading={['liquid-editions', 'fanimani', 'board-dev'].includes(project.slug) ? 'eager' : 'lazy'}
-                      />
-                    ) : (
-                      <div className={styles.typePreview}>
-                        <span className={styles.projectNumber}>
-                          {String(projects.indexOf(project) + 1).padStart(2, '0')}
-                        </span>
-                        <strong>{project.name}</strong>
-                        <p>{details?.stack.slice(0, 4).join(' / ')}</p>
-                        <span className={styles.previewLabel}>
-                          {project.resources.some((resource) => resource.kind === 'source')
-                            ? 'Explore the application & source'
-                            : 'Explore the case study'}{' '}
-                          ↗
-                        </span>
-                      </div>
-                    )}
-                  </Link>
-                  {punk && <ImplantUpgrade slug={project.slug} />}
-                </article>
+                  <article
+                    className={styles.card}
+                    ref={(element) => {
+                      cards.current[index] = element;
+                    }}
+                    style={cardStyle}
+                    data-installed={(punk && loadout.installed.includes(project.slug)) || undefined}
+                    data-highlighted={highlightedProject === project.slug || undefined}
+                    onAnimationEnd={(event) => {
+                      if (event.target === event.currentTarget && index === cardPresets.length - 1)
+                        setEntranceComplete(true);
+                    }}
+                    data-muted={(highlightedProject !== null && highlightedProject !== project.slug) || undefined}
+                    onPointerEnter={(event) => {
+                      if (event.pointerType !== 'touch') setHoveredProject(project.slug);
+                    }}
+                    onPointerLeave={() => setHoveredProject(null)}
+                    onFocus={(event) => {
+                      bringToFront(index);
+                      if (event.target instanceof HTMLElement && event.target.matches(':focus-visible'))
+                        setFocusedProject(project.slug);
+                    }}
+                    onBlur={() => setFocusedProject(null)}
+                  >
+                    <div className={styles.cardHeader}>
+                      <ViewTransition name={`project-title-${project.slug}`} share="project-title" default="none">
+                        <Link
+                          className={styles.cardTitle}
+                          href={`/projects/${project.slug}`}
+                          aria-describedby="card-instructions"
+                          onPointerDown={(event) => beginDrag(event, index)}
+                          onPointerMove={moveCard}
+                          onPointerUp={(event) => endDrag(event)}
+                          onPointerCancel={(event) => endDrag(event, true)}
+                          onLostPointerCapture={(event) => endDrag(event, true)}
+                          onDragStart={(event) => event.preventDefault()}
+                          onKeyDown={(event) => keyboardMove(event, index)}
+                          onClick={(event) => {
+                            if (clickGuard.consume(index, event.detail)) event.preventDefault();
+                          }}
+                        >
+                          {project.name}
+                        </Link>
+                      </ViewTransition>
+                      <Image src="/assets/arrow-right-up.svg" width={24} height={24} alt="" />
+                    </div>
+                    <p className={styles.tagline}>
+                      {(punk && getPunkProjectCopy(project.slug)?.tagline) || project.tagline}
+                    </p>
+                    <ViewTransition name={`project-image-${project.slug}`} share="project-image" default="none">
+                      <Link className={styles.preview} href={`/projects/${project.slug}`} tabIndex={-1}>
+                        {visual ? (
+                          <Image
+                            src={visual.src}
+                            alt={visual.alt}
+                            width={visual.width}
+                            height={visual.height}
+                            sizes="(max-width: 699px) 90vw, (max-width: 1099px) 45vw, 30vw"
+                            draggable={false}
+                            loading={
+                              ['liquid-editions', 'fanimani', 'board-dev'].includes(project.slug) ? 'eager' : 'lazy'
+                            }
+                          />
+                        ) : (
+                          <div className={styles.typePreview}>
+                            <span className={styles.projectNumber}>
+                              {String(projects.indexOf(project) + 1).padStart(2, '0')}
+                            </span>
+                            <strong>{project.name}</strong>
+                            <p>{details?.stack.slice(0, 4).join(' / ')}</p>
+                            <span className={styles.previewLabel}>
+                              {project.resources.some((resource) => resource.kind === 'source')
+                                ? 'Explore the application & source'
+                                : 'Explore the case study'}{' '}
+                              ↗
+                            </span>
+                          </div>
+                        )}
+                      </Link>
+                    </ViewTransition>
+                    {punk && <ImplantUpgrade slug={project.slug} />}
+                  </article>
+                </ViewTransition>
               );
             })}
           </div>
