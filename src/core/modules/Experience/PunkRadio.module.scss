@@ -194,11 +194,3 @@
     background: var(--neon-pink);
   }
 }
-.panel[data-minimized] {
-  padding: 3px;
-}
-.header[hidden],
-.controls[hidden],
-.tuner[hidden] {
-  display: none;
-}

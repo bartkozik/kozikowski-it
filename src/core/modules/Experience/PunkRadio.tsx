@@ -41,10 +41,10 @@ function RadioReceiver() {
         }
       }}
     >
-      <div id="punk-radio-player" className={styles.panel} hidden={!enabled} data-minimized={minimized || undefined}>
+      <div id="punk-radio-player" className={styles.panel} hidden={view !== 'expanded'}>
         {enabled && (
           <>
-            <header className={styles.header} hidden={minimized}>
+            <header className={styles.header}>
               <div>
                 <span className={styles.serial}>RX—01 / UNLICENSED HARDWARE</span>
                 <h2>
@@ -71,19 +71,19 @@ function RadioReceiver() {
                 </button>
               </div>
             </header>
-            <div className={styles.tuner} aria-hidden="true" hidden={minimized}>
+            <div className={styles.tuner} aria-hidden="true">
               <span /> <b>2077</b>
             </div>
             <iframe
               title="Spotify — Cyberpunk 2077 Official Playlist"
               src={`https://open.spotify.com/embed/playlist/${playlistId}?theme=0`}
               width="100%"
-              height={minimized ? 80 : showTracks ? 352 : 152}
+              height={showTracks ? 352 : 152}
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
               allowFullScreen
               className={styles.player}
             />
-            <div className={styles.controls} hidden={minimized}>
+            <div className={styles.controls}>
               <button type="button" aria-pressed={showTracks} onClick={() => setShowTracks((current) => !current)}>
                 {showTracks ? '− Hide tracklist' : '+ Tracklist'}
               </button>
