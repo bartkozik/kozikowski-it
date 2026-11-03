@@ -1,13 +1,20 @@
 # kozikowski.it
 
-Personal portfolio of Bartosz Kozikowski, built with Next.js, React, TypeScript and SCSS Modules.
+Bartosz Kozikowski’s portfolio, built with Next.js, React, TypeScript and SCSS Modules.
 
-## Requirements
+Projects appear as a stack of draggable cards. Each opens a page with the project’s context, technology stack, my contribution and links to available source code.
 
-- Node.js 24 (`nvm use` if using nvm)
-- npm
+## Interface
 
-## Getting started
+- Drag, filter and shuffle project cards, with keyboard controls and a stacked mobile layout.
+- Switch between Day, Night and Punk modes. Punk adds an implant catalogue, animated card shuffle and a Spotify radio.
+- Browse project galleries, experience and contact details, or download the PDF resume.
+
+Animations respect the system’s reduced-motion preference. Performance figures shown on the site come from recorded Lighthouse audits of local production builds; they are not live monitoring data.
+
+## Local development
+
+Requires Node.js 24 and npm. No environment variables are needed to run the portfolio locally.
 
 ```sh
 npm ci
@@ -16,54 +23,15 @@ npm run dev
 
 Open <http://127.0.0.1:3100>.
 
-## Scripts
-
-| Command                | Purpose                                                 |
-| ---------------------- | ------------------------------------------------------- |
-| `npm run dev`          | Start the development server                            |
-| `npm run build`        | Create a production build                               |
-| `npm start`            | Serve locally after `npm run build`                     |
-| `npm run lint`         | Run ESLint                                              |
-| `npm test`             | Run interaction and formatting unit tests               |
-| `npm run typecheck`    | Check TypeScript types                                  |
-| `npm run format`       | Format source and configuration                         |
-| `npm run format:check` | Check formatting                                        |
-| `npm run check`        | Run formatting checks, lint, tests, typecheck and build |
-
-## Measure the portfolio
-
-Build and start the production server, then run the pinned Lighthouse desktop audit:
+## Checks
 
 ```sh
-npm run build
-npm start
+npm run check
 ```
 
-In another terminal:
+Runs formatting checks, ESLint, unit tests, TypeScript checks and a production build. Tests cover card movement, filtering, interface modes and metric calculations.
 
-```sh
-npm run metrics:audit -- --output-path /tmp/portfolio-lighthouse.json
-npm run metrics:measure -- --report /tmp/portfolio-lighthouse.json
-```
-
-The audit uses Lighthouse `13.6.0` through `npm exec`, without adding a project dependency. Chrome must be installed. The measurement script accepts only localhost reports and fetches only their loaded, same-origin JavaScript responses. It updates `src/core/content/site-metrics.ts`; rebuild to display the new results. Keep the same production build running between the audit and the measurement command.
-
-TTFB, FCP and load time are observed Lighthouse trace timings. The category scores use the recorded desktop simulation profile. JavaScript size is the sum of individually gzip-compressed loaded scripts at level 9. Unavailable measurements remain empty. Raw reports stay in the chosen local output location.
-
-To include a timed successful build, pass `--build-time /tmp/portfolio-build.json` with this JSON structure:
-
-```json
-{
-  "durationSeconds": 0,
-  "recordedAt": "ISO-8601 timestamp of the actual build",
-  "profile": "Describe the machine and whether the build cache was present",
-  "exitCode": 0
-}
-```
-
-Replace the example fields with the recorded build result; omit `--build-time` when no build measurement is available.
-
-## Container
+## Docker and deployment
 
 ```sh
 docker build --tag kozikowski-it:local .
@@ -71,8 +39,6 @@ bash scripts/test-container.sh kozikowski-it:local
 docker run --rm --publish 127.0.0.1:3000:3000 kozikowski-it:local
 ```
 
-The runtime contains the standalone Next.js build and public assets, runs as an unprivileged user and exposes `/healthz`. Container smoke checks cover all project routes, JavaScript, the resume PDF and image optimization.
+The image contains the standalone Next.js build and runs as a non-root user. Smoke tests check project routes, static assets, the resume PDF, image optimization and `/healthz`.
 
-Pull requests must pass `quality` and `image`. A push to `main` publishes the exact tested image to `ghcr.io/bartkozik/kozikowski-it`, tagged with the commit SHA. Deployments use its immutable digest.
-
-Production infrastructure is maintained in [portfolio-infra](https://github.com/bartkozik/portfolio-infra). Set repository variable `PRODUCTION_ENABLED=true` only after commissioning the VPS. The `production` environment requires variable `DEPLOY_HOST` and secrets `DEPLOY_SSH_KEY` and `DEPLOY_KNOWN_HOSTS`. Obtain the SSH host fingerprint through a trusted OVH console; deployments enforce host-key verification. Configure package visibility or host-side registry read access before the first deployment.
+GitHub Actions checks code quality, scans Git history for secrets and tests the image before publishing it to GHCR. Production deployments use the tested image’s digest. Server configuration and rollback are maintained in [portfolio-infra](https://github.com/bartkozik/portfolio-infra).
