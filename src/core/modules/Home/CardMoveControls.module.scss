@@ -1,0 +1,66 @@
+@use '@/core/theme' as theme;
+
+.controls {
+  margin-top: 12px;
+  font-size: 13px;
+
+  summary {
+    width: fit-content;
+    padding: 12px 8px;
+    min-height: 44px;
+    cursor: pointer;
+    text-underline-offset: 4px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid theme.$color-border;
+  background: theme.$color-card;
+
+  select {
+    min-width: 0;
+    max-width: 100%;
+    min-height: 44px;
+    padding: 8px;
+    color: theme.$color-text;
+    background: theme.$color-background;
+    border: 1px solid theme.$color-border;
+    font: inherit;
+  }
+}
+
+.directions {
+  display: flex;
+  gap: 4px;
+
+  button {
+    width: 44px;
+    height: 44px;
+    border: 1px solid theme.$color-border;
+    background: theme.$color-background;
+    color: theme.$color-text;
+    font: inherit;
+    font-size: 20px;
+    cursor: pointer;
+
+    &:hover {
+      background: theme.$color-text;
+      color: theme.$color-background;
+    }
+  }
+}
+
+@media (max-width: 1099px), (pointer: coarse) {
+  .controls {
+    display: none;
+  }
+}

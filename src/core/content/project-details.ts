@@ -1,5 +1,7 @@
+import type { ProjectSlug } from './projects.ts';
+
 export interface ProjectDetails {
-  readonly slug: string;
+  readonly slug: ProjectSlug;
   readonly overview: string;
   readonly role: string;
   readonly stack: readonly string[];

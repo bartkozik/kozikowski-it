@@ -66,3 +66,25 @@ export function shuffledPositions(
     ),
   );
 }
+
+export type MoveDirection = 'left' | 'right' | 'up' | 'down';
+
+export function nudgePosition(
+  position: CardPosition,
+  direction: MoveDirection,
+  size: CardDimensions,
+  boardHeight: number,
+  step = 20,
+): CardPosition {
+  const next = constrainPosition(
+    {
+      ...position,
+      x: position.x + (direction === 'right' ? step : direction === 'left' ? -step : 0),
+      y: position.y + (direction === 'down' ? step : direction === 'up' ? -step : 0),
+    },
+    size.width,
+    size.height,
+    boardHeight,
+  );
+  return next.x === position.x && next.y === position.y ? position : next;
+}

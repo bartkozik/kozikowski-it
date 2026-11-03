@@ -86,7 +86,7 @@
       color 180ms ease;
     &:hover,
     &[data-highlighted='true'] {
-      color: theme.$color-accent;
+      color: var(--color-link-accent);
       background: var(--surface-hover);
     }
     span {
@@ -285,7 +285,19 @@
       display: none;
     }
   }
-  .toolbar,
+  .toolbar {
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+
+    button {
+      min-height: 44px;
+    }
+  }
+  .sortButtons {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .shuffle,
   .instructions {
     display: none;
   }

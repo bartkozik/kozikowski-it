@@ -3,6 +3,7 @@
 :root {
   color-scheme: light;
   --color-accent: #ea3323;
+  --color-link-accent: #c52719;
   --color-background: #ffffff;
   --color-card: #fefefe;
   --color-text: #0d0d0d;
@@ -18,6 +19,7 @@
 html[data-mode='night'] {
   color-scheme: dark;
   --color-accent: #ff7869;
+  --color-link-accent: #ff7869;
   --color-background: #14161b;
   --color-card: #1e2129;
   --color-text: #f2f0eb;
@@ -32,6 +34,7 @@ html[data-mode='night'] {
 html[data-mode='punk'] {
   color-scheme: dark;
   --color-accent: #eaff55;
+  --color-link-accent: #eaff55;
   --color-background: #0b0712;
   --color-card: #171021;
   --color-text: #f2eaf7;
@@ -125,6 +128,7 @@ html {
   :root {
     color-scheme: light;
     --color-accent: #000000;
+    --color-link-accent: #000000;
     --color-background: #ffffff;
     --color-card: #ffffff;
     --color-text: #000000;
