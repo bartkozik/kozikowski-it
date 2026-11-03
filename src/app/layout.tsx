@@ -7,6 +7,7 @@ import { PunkRadio } from '@/core/modules/Experience/PunkRadio';
 import { modeBootstrap } from '@/core/modules/Experience/interface-mode';
 
 import { MetricsBar } from '@/core/modules/MetricsBar';
+import { SiteSignature } from '@/core/modules/SiteSignature/SiteSignature';
 import { fontVariables } from '@/core/theme/fonts';
 
 import '@/core/theme/theme-style.scss';
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <ExperienceProvider>
           <ModeSwitch />
           {children}
+          <SiteSignature />
           <PunkRadio />
           <MetricsBar />
         </ExperienceProvider>

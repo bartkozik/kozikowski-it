@@ -300,15 +300,6 @@ export function Home() {
             <br />
             <span>Based in Warsaw. Working everywhere.</span>
           </p>
-          <div className={styles.brand}>
-            <div className={styles.brandLogo}>
-              <Image src="/assets/lajka-corp.webp" alt="" width={150} height={84} sizes="150px" />
-            </div>
-            <div className={styles.brandName}>
-              <b>Lajka Corp.</b>
-              <small>{punk ? 'IT / UNDERGROUND SYSTEMS' : 'IT / INDEPENDENT DEVELOPMENT'}</small>
-            </div>
-          </div>
         </aside>
         <section className={styles.board} aria-label="Project cards">
           <div className={styles.toolbar}>
