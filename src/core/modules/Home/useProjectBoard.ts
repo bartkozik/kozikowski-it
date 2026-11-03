@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
+import { useCallback, useEffect, useReducer, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
 
 import {
   BOARD_WIDTH,
@@ -13,7 +13,15 @@ import {
   type CardDimensions,
 } from './board-layout';
 import { cardPresets } from './card-presets';
-import { isProjectVisible, nextArrangement, projectFilters, type Arrangement } from './project-filters';
+import {
+  isProjectVisible,
+  nextArrangement,
+  projectFilters,
+  filterReducer,
+  initialFilterState,
+  type Arrangement,
+  type ProjectFilter,
+} from './project-filters';
 import { createDragClickGuard } from './drag-click-guard';
 
 const desktopBoardQuery = '(min-width: 1100px) and (pointer: fine)';
@@ -34,17 +42,30 @@ type DragState = {
   moved: boolean;
 };
 
+function positionsForFilter(mode: Arrangement): readonly CardPosition[] {
+  const featured = mode === 'loved' || mode === 'painful' ? projectFilters[mode] : [];
+  return cardPresets.map((position) => {
+    const rank = featured.indexOf(position.slug);
+    return rank < 0
+      ? position
+      : { ...position, x: 60 + rank * 330, y: rank === 1 ? 150 : 70, rotation: rank === 1 ? 4 : -3 };
+  });
+}
+
 export function useProjectBoard() {
   const [positions, setPositions] = useState<readonly CardPosition[]>(cardPresets);
+  const [previewPositions, setPreviewPositions] = useState<readonly CardPosition[] | null>(null);
   const [order, setOrder] = useState(cardPresets.map((_, index) => index));
-  const [arrangement, setArrangement] = useState<Arrangement>('original');
+  const [filterState, dispatchFilter] = useReducer(filterReducer, initialFilterState);
+  const { arrangement } = filterState;
+  const visibleArrangement = filterState.preview ?? arrangement;
   const [announcement, setAnnouncement] = useState('');
   const [entranceComplete, setEntranceComplete] = useState(false);
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [focusedProject, setFocusedProject] = useState<string | null>(null);
   const highlightCandidate = focusedProject ?? hoveredProject;
   const highlightedProject =
-    highlightCandidate && isProjectVisible(highlightCandidate, arrangement) ? highlightCandidate : null;
+    highlightCandidate && isProjectVisible(highlightCandidate, visibleArrangement) ? highlightCandidate : null;
   const drag = useRef<DragState | null>(null);
   const [clickGuard] = useState(createDragClickGuard);
   const canvas = useRef<HTMLDivElement>(null);
@@ -193,11 +214,26 @@ export function useProjectBoard() {
     nudgeCard(index, direction, event.shiftKey ? 60 : 20);
   }
 
+  function previewFilter(event: PointerEvent<HTMLButtonElement>, filter: ProjectFilter) {
+    if (event.pointerType !== 'mouse') return;
+    setEntranceComplete(true);
+    const arranged = positionsForFilter(filter);
+    const measurement = window.matchMedia(desktopBoardQuery).matches ? measureCards() : null;
+    setPreviewPositions(
+      measurement ? constrainPositions(arranged, measurement.dimensions, measurement.height) : arranged,
+    );
+    dispatchFilter({ type: 'preview', filter });
+  }
+
+  function clearFilterPreview() {
+    dispatchFilter({ type: 'leave' });
+  }
+
   function arrange(requested: Arrangement) {
     const mode = nextArrangement(arrangement, requested);
     setEntranceComplete(true);
     const measurement = window.matchMedia(desktopBoardQuery).matches ? measureCards() : null;
-    setArrangement(mode);
+    dispatchFilter({ type: 'select', arrangement: requested });
     setHoveredProject(null);
     setFocusedProject(null);
     if (mode === 'shuffle') {
@@ -205,12 +241,7 @@ export function useProjectBoard() {
       setOrder(cardPresets.map((_, index) => index));
     } else {
       const featured = mode === 'loved' || mode === 'painful' ? projectFilters[mode] : [];
-      const arranged = cardPresets.map((position) => {
-        const rank = featured.indexOf(position.slug);
-        return rank < 0
-          ? position
-          : { ...position, x: 60 + rank * 330, y: rank === 1 ? 150 : 70, rotation: rank === 1 ? 4 : -3 };
-      });
+      const arranged = positionsForFilter(mode);
       setPositions(measurement ? constrainPositions(arranged, measurement.dimensions, measurement.height) : arranged);
       const indices = cardPresets.map((_, index) => index);
       setOrder([
@@ -230,9 +261,12 @@ export function useProjectBoard() {
   }
 
   return {
-    positions,
+    positions: filterState.preview !== null && previewPositions ? previewPositions : positions,
     order,
     arrangement,
+    visibleArrangement,
+    previewFilter,
+    clearFilterPreview,
     announcement,
     entranceComplete,
     highlightedProject,

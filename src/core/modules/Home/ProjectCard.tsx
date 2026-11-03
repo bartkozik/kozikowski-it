@@ -27,7 +27,7 @@ export function ProjectCard({ project, index, board }: ProjectCardProps) {
     positions,
     order,
     highlightedProject,
-    arrangement,
+    visibleArrangement,
     registerCard,
     setEntranceComplete,
     setHoveredProject,
@@ -58,7 +58,7 @@ export function ProjectCard({ project, index, board }: ProjectCardProps) {
     <ViewTransition name={`project-${project.slug}`} share="project-expand" default="none">
       <article
         className={styles.card}
-        hidden={!isProjectVisible(project.slug, arrangement)}
+        hidden={!isProjectVisible(project.slug, visibleArrangement)}
         ref={(element) => registerCard(index, element)}
         style={cardStyle}
         data-installed={(punk && loadout.installed.includes(project.slug)) || undefined}

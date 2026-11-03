@@ -18,3 +18,26 @@ export function isProjectVisible(slug: string, arrangement: Arrangement): boolea
     projectFilters[arrangement].some((project) => project === slug)
   );
 }
+
+export type ProjectFilter = 'loved' | 'painful';
+
+interface FilterState {
+  readonly arrangement: Arrangement;
+  readonly preview: ProjectFilter | null;
+}
+
+type FilterAction =
+  { type: 'preview'; filter: ProjectFilter } | { type: 'leave' } | { type: 'select'; arrangement: Arrangement };
+
+export const initialFilterState: FilterState = { arrangement: 'original', preview: null };
+
+export function filterReducer(state: FilterState, action: FilterAction): FilterState {
+  switch (action.type) {
+    case 'preview':
+      return { ...state, preview: action.filter };
+    case 'leave':
+      return state.preview === null ? state : { ...state, preview: null };
+    case 'select':
+      return { arrangement: nextArrangement(state.arrangement, action.arrangement), preview: null };
+  }
+}

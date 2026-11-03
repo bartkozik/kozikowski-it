@@ -1,0 +1,34 @@
+import assert from 'node:assert/strict';
+import { test } from 'node:test';
+
+import * as filters from '../project-filters.ts';
+
+test('hover previews another filter and leaving restores the committed selection', () => {
+  assert.equal(typeof filters.filterReducer, 'function');
+  const selected = { arrangement: 'loved', preview: null } as const;
+  const preview = filters.filterReducer(selected, { type: 'preview', filter: 'painful' });
+  assert.deepEqual(preview, { arrangement: 'loved', preview: 'painful' });
+  assert.deepEqual(filters.filterReducer(preview, { type: 'leave' }), selected);
+});
+
+test('click commits a preview, while clicking an active filter clears it immediately', () => {
+  assert.equal(typeof filters.filterReducer, 'function');
+  const preview = { arrangement: 'original', preview: 'loved' } as const;
+  const pinned = filters.filterReducer(preview, { type: 'select', arrangement: 'loved' });
+  assert.deepEqual(pinned, { arrangement: 'loved', preview: null });
+  const hoveredAgain = filters.filterReducer(pinned, { type: 'preview', filter: 'loved' });
+  assert.deepEqual(filters.filterReducer(hoveredAgain, { type: 'select', arrangement: 'loved' }), {
+    arrangement: 'original',
+    preview: null,
+  });
+});
+
+test('leaving a preview preserves shuffle and reset clears a preview', () => {
+  assert.equal(typeof filters.filterReducer, 'function');
+  const preview = { arrangement: 'shuffle', preview: 'painful' } as const;
+  assert.deepEqual(filters.filterReducer(preview, { type: 'leave' }), { arrangement: 'shuffle', preview: null });
+  assert.deepEqual(filters.filterReducer(preview, { type: 'select', arrangement: 'original' }), {
+    arrangement: 'original',
+    preview: null,
+  });
+});

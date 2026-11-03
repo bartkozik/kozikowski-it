@@ -21,6 +21,8 @@ export function Home() {
   const board = useProjectBoard();
   const {
     arrangement,
+    previewFilter,
+    clearFilterPreview,
     announcement,
     entranceComplete,
     highlightedProject,
@@ -98,6 +100,9 @@ export function Home() {
                 type="button"
                 aria-pressed={arrangement === 'loved'}
                 title="EPOCA, Board.Dev and PM Traffic Manager"
+                onPointerEnter={(event) => previewFilter(event, 'loved')}
+                onPointerLeave={clearFilterPreview}
+                onPointerCancel={clearFilterPreview}
                 onClick={() => arrange('loved')}
               >
                 Most loved
@@ -106,6 +111,9 @@ export function Home() {
                 type="button"
                 aria-pressed={arrangement === 'painful'}
                 title="Ad Template Platform and Art Network"
+                onPointerEnter={(event) => previewFilter(event, 'painful')}
+                onPointerLeave={clearFilterPreview}
+                onPointerCancel={clearFilterPreview}
                 onClick={() => arrange('painful')}
               >
                 Most painful

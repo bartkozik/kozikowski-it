@@ -14,7 +14,7 @@ const directions = ['left', 'up', 'down', 'right'] as const satisfies readonly M
 export function CardMoveControls({ board }: { readonly board: ReturnType<typeof useProjectBoard> }) {
   const selectId = useId();
   const [selectedSlug, setSelectedSlug] = useState<string>(projects[0].slug);
-  const visibleProjects = projects.filter((project) => isProjectVisible(project.slug, board.arrangement));
+  const visibleProjects = projects.filter((project) => isProjectVisible(project.slug, board.visibleArrangement));
   const selected = visibleProjects.find((project) => project.slug === selectedSlug) ?? visibleProjects[0];
   if (!selected) return null;
   const index = cardPresets.findIndex((preset) => preset.slug === selected.slug);
