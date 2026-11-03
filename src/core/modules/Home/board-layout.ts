@@ -88,3 +88,31 @@ export function nudgePosition(
   );
   return next.x === position.x && next.y === position.y ? position : next;
 }
+
+export function hasLayoutChanges(positions: readonly CardPosition[], baseline: readonly CardPosition[]): boolean {
+  return (
+    positions.length !== baseline.length ||
+    positions.some((position, index) => {
+      const original = baseline[index];
+      return position.x !== original.x || position.y !== original.y || position.rotation !== original.rotation;
+    })
+  );
+}
+
+export interface BoardLayout {
+  readonly positions: readonly CardPosition[];
+  readonly baseline: readonly CardPosition[];
+}
+
+export function resizeLayout(
+  layout: BoardLayout,
+  presets: readonly CardPosition[],
+  dimensions: readonly CardDimensions[],
+  height: number,
+): BoardLayout {
+  const baseline = constrainPositions(presets, dimensions, height);
+  const positions = hasLayoutChanges(layout.positions, layout.baseline)
+    ? constrainPositions(layout.positions, dimensions, height)
+    : baseline;
+  return { positions, baseline };
+}

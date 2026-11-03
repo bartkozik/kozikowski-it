@@ -1,4 +1,13 @@
-import { useCallback, useEffect, useReducer, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type PointerEvent,
+  type SetStateAction,
+} from 'react';
 
 import {
   BOARD_WIDTH,
@@ -8,6 +17,9 @@ import {
   movedBeyondThreshold,
   shuffledPositions,
   nudgePosition,
+  hasLayoutChanges,
+  resizeLayout,
+  type BoardLayout,
   type MoveDirection,
   type CardPosition,
   type CardDimensions,
@@ -53,7 +65,15 @@ function positionsForFilter(mode: Arrangement): readonly CardPosition[] {
 }
 
 export function useProjectBoard() {
-  const [positions, setPositions] = useState<readonly CardPosition[]>(cardPresets);
+  const [layout, setLayout] = useState<BoardLayout>({ positions: cardPresets, baseline: cardPresets });
+  const { positions, baseline } = layout;
+
+  function setPositions(update: SetStateAction<readonly CardPosition[]>) {
+    setLayout((current) => ({
+      ...current,
+      positions: typeof update === 'function' ? update(current.positions) : update,
+    }));
+  }
   const [previewPositions, setPreviewPositions] = useState<readonly CardPosition[] | null>(null);
   const [order, setOrder] = useState(cardPresets.map((_, index) => index));
   const [filterState, dispatchFilter] = useReducer(filterReducer, initialFilterState);
@@ -97,8 +117,9 @@ export function useProjectBoard() {
       frame = 0;
       if (!desktop.matches) return;
       const measurement = measureCards();
-      if (measurement)
-        setPositions((current) => constrainPositions(current, measurement.dimensions, measurement.height));
+      if (measurement) {
+        setLayout((current) => resizeLayout(current, cardPresets, measurement.dimensions, measurement.height));
+      }
     }
 
     function scheduleMeasurement() {
@@ -242,7 +263,11 @@ export function useProjectBoard() {
     } else {
       const featured = mode === 'loved' || mode === 'painful' ? projectFilters[mode] : [];
       const arranged = positionsForFilter(mode);
-      setPositions(measurement ? constrainPositions(arranged, measurement.dimensions, measurement.height) : arranged);
+      const nextPositions = measurement
+        ? constrainPositions(arranged, measurement.dimensions, measurement.height)
+        : arranged;
+      if (mode === 'original') setLayout({ positions: nextPositions, baseline: nextPositions });
+      else setPositions(nextPositions);
       const indices = cardPresets.map((_, index) => index);
       setOrder([
         ...indices.filter((index) => !featured.includes(cardPresets[index].slug)),
@@ -261,6 +286,7 @@ export function useProjectBoard() {
   }
 
   return {
+    canReset: arrangement !== 'original' || hasLayoutChanges(positions, baseline),
     positions: filterState.preview !== null && previewPositions ? previewPositions : positions,
     order,
     arrangement,

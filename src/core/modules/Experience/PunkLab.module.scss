@@ -189,9 +189,13 @@
   font: 10px monospace;
   text-transform: uppercase;
   cursor: pointer;
-  &:hover {
+  &:hover:not(:disabled) {
     border-color: var(--neon-pink);
     background: #ff2bba15;
+  }
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
   }
 }
 .console {

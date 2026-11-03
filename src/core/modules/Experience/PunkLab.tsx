@@ -79,7 +79,12 @@ export function PunkLab() {
             );
           })}
         </ol>
-        <button className={styles.reboot} type="button" onClick={() => dispatch({ type: 'reset' })}>
+        <button
+          className={styles.reboot}
+          type="button"
+          disabled={loadout.installed.length === 0}
+          onClick={() => dispatch({ type: 'reset' })}
+        >
           <ArrowIcon direction="reset" size={20} /> Reboot humanity
         </button>
       </div>

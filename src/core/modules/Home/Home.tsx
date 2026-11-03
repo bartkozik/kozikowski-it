@@ -135,7 +135,7 @@ export function Home() {
             <button
               type="button"
               className={styles.reset}
-              disabled={chaos.scrambling}
+              disabled={chaos.scrambling || !board.canReset}
               onClick={() => arrange('original')}
             >
               {punk ? 'RESTORE SANITY' : 'Reset layout'}
