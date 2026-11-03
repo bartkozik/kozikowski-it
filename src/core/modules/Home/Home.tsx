@@ -15,6 +15,7 @@ import {
 
 import { useExperience } from '@/core/modules/Experience/ExperienceProvider';
 import { PunkLab } from '@/core/modules/Experience/PunkLab';
+import { SiteSignature } from '@/core/modules/SiteSignature/SiteSignature';
 import { ImplantUpgrade } from '@/core/modules/Experience/ImplantUpgrade';
 
 import { projects } from '@/core/content/projects';
@@ -300,6 +301,7 @@ export function Home() {
             <br />
             <span>Based in Warsaw. Working everywhere.</span>
           </p>
+          <SiteSignature />
         </aside>
         <section className={styles.board} aria-label="Project cards">
           <div className={styles.toolbar}>
