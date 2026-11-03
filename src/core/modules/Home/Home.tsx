@@ -45,6 +45,7 @@ export function Home() {
   const [order, setOrder] = useState(cardPresets.map((_, index) => index));
   const [arrangement, setArrangement] = useState<Arrangement>('original');
   const [announcement, setAnnouncement] = useState('');
+  const [entranceComplete, setEntranceComplete] = useState(false);
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [focusedProject, setFocusedProject] = useState<string | null>(null);
   const highlightedProject = hoveredProject ?? focusedProject;
@@ -103,6 +104,7 @@ export function Home() {
   }
 
   function beginDrag(event: PointerEvent<HTMLAnchorElement>, index: number) {
+    setEntranceComplete(true);
     clickGuard.reset();
     if (event.button !== 0 || !window.matchMedia('(min-width: 1100px) and (pointer: fine)').matches) return;
     const measurement = measureCards();
@@ -170,6 +172,7 @@ export function Home() {
     )
       return;
     event.preventDefault();
+    setEntranceComplete(true);
     const step = event.shiftKey ? 60 : 20;
     const measurement = measureCards();
     const size = measurement?.dimensions[index];
@@ -194,6 +197,7 @@ export function Home() {
   }
 
   function arrange(mode: Arrangement) {
+    setEntranceComplete(true);
     const measurement = measureCards();
     if (!measurement) return;
     setArrangement(mode);
@@ -310,7 +314,7 @@ export function Home() {
           <p className={styles.instructions} id="card-instructions">
             Drag a title to move a card. Click to explore. <span>Keyboard: arrow keys to move, Enter to open.</span>
           </p>
-          <div className={styles.canvas} ref={canvas}>
+          <div className={styles.canvas} ref={canvas} data-entering={!entranceComplete || undefined}>
             {cardPresets.map((preset, index) => {
               const project = projects.find((item) => item.slug === preset.slug)!;
               const visual = getProjectVisual(project.slug);
@@ -323,6 +327,10 @@ export function Home() {
                 '--rotation': `${position.rotation}deg`,
                 '--image-ratio': preset.imageRatio,
                 '--mobile-order': projects.indexOf(project),
+                '--entrance-delay': `${index * 45}ms`,
+                '--entrance-x': `${index % 2 === 0 ? -100 : 100}px`,
+                '--entrance-y': `${index % 3 === 0 ? -120 : 140}px`,
+                '--entrance-rotation': `${index % 2 === 0 ? -12 : 12}deg`,
                 zIndex: highlightedProject === project.slug ? cardPresets.length + 1 : order.indexOf(index) + 1,
               } as CSSProperties;
               return (
@@ -333,6 +341,11 @@ export function Home() {
                     cards.current[index] = element;
                   }}
                   style={cardStyle}
+                  data-highlighted={highlightedProject === project.slug || undefined}
+                  onAnimationEnd={(event) => {
+                    if (event.target === event.currentTarget && index === cardPresets.length - 1)
+                      setEntranceComplete(true);
+                  }}
                   data-muted={(highlightedProject !== null && highlightedProject !== project.slug) || undefined}
                   onPointerEnter={(event) => {
                     if (event.pointerType !== 'touch') setHoveredProject(project.slug);
