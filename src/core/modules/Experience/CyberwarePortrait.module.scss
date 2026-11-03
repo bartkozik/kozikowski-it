@@ -1,0 +1,70 @@
+.portrait {
+  stroke-linejoin: bevel;
+  stroke-linecap: square;
+}
+
+.plate,
+.helmet {
+  fill: #120e1f;
+  stroke: var(--neon-cyan);
+  stroke-width: 2;
+}
+
+.helmet {
+  stroke: var(--neon-pink);
+}
+
+.armor {
+  fill: #302039;
+  stroke: var(--neon-pink);
+  stroke-width: 1.5;
+}
+
+.optic,
+.visorFrame {
+  fill: #0b0712;
+  stroke: var(--color-accent);
+  stroke-width: 2;
+}
+
+.core,
+.visor {
+  fill: var(--color-accent);
+  filter: drop-shadow(0 0 4px #eaff5570);
+}
+
+.visorSlits {
+  stroke: #0b0712;
+  stroke-width: 2;
+}
+
+.circuit {
+  stroke: var(--neon-pink);
+  stroke-width: 2;
+}
+
+.signal {
+  stroke: var(--neon-cyan);
+  stroke-width: 2;
+}
+
+.augmentation {
+  animation: assemble 240ms ease-out;
+}
+
+@keyframes assemble {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .augmentation {
+    animation: none;
+  }
+}

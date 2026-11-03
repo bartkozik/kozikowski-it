@@ -1,4 +1,25 @@
-$color-background: #ffffff;
-$color-text: #202020;
-$color-muted: #555555;
-$font-body: system-ui, sans-serif;
+$color-accent: var(--color-accent);
+$color-background: var(--color-background);
+$color-card: var(--color-card);
+$color-text: var(--color-text);
+$color-muted: var(--color-muted);
+$color-border: var(--color-border);
+
+$font-heading: var(--font-heading), sans-serif;
+$font-body: var(--font-body), sans-serif;
+$font-metrics: var(--font-metrics), sans-serif;
+
+$font-weight-heading: 800;
+$font-weight-body: 400;
+$font-weight-medium: 500;
+$font-weight-metrics: 400;
+
+$font-size-heading: 40px;
+$font-size-body: 16px;
+$font-size-metrics: 24px;
+
+$line-height-heading: 47px;
+$line-height-body: 24px;
+
+$letter-spacing-heading: -0.02em;
+$letter-spacing-body: 0.01em;

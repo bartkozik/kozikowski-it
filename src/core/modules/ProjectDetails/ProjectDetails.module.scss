@@ -1,0 +1,333 @@
+@use '../../theme' as theme;
+
+.page {
+  padding-bottom: 100px;
+}
+
+.header {
+  position: relative;
+  padding: 40px 20px 0;
+  text-align: center;
+
+  h1 {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding-inline: 80px;
+    color: theme.$color-accent;
+    font-family: theme.$font-heading;
+    font-size: 40px;
+    font-weight: theme.$font-weight-heading;
+    line-height: 47px;
+    letter-spacing: theme.$letter-spacing-heading;
+    overflow-wrap: anywhere;
+  }
+}
+
+.tagline {
+  max-width: 760px;
+  margin: 8px auto 0;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.projectNavigation {
+  position: absolute;
+  inset: 40px 32px auto;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+
+  a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    text-decoration: none;
+    pointer-events: auto;
+
+    &:hover {
+      text-decoration: underline;
+      text-underline-offset: 5px;
+    }
+  }
+}
+
+.backLink,
+.nextLink {
+  white-space: nowrap;
+}
+
+.contentLayout {
+  position: relative;
+  width: min(910px, calc(100% - 40px));
+  margin: 62px auto 0;
+}
+
+.contents {
+  position: absolute;
+  inset: 0 calc(100% + 20px) 0 auto;
+  width: min(306px, calc((100vw - 990px) / 2));
+}
+
+.sectionNavigation {
+  position: sticky;
+  top: 32px;
+  display: grid;
+  gap: 20px;
+
+  a {
+    display: flex;
+    min-height: 52px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid theme.$color-border;
+    border-radius: 2px;
+    padding: 12px 16px;
+    background: theme.$color-card;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    text-decoration: none;
+
+    &:hover {
+      border-color: theme.$color-accent;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+  }
+}
+
+.article {
+  font-size: 18px;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+
+.introduction,
+.section,
+.footer {
+  width: min(760px, 100%);
+  margin-inline: auto;
+}
+
+.introduction {
+  margin-block: 0;
+}
+
+.section {
+  margin-top: 40px;
+  scroll-margin-top: 32px;
+
+  h2 {
+    margin: 0 0 32px;
+    font-family: theme.$font-heading;
+    font-size: 40px;
+    font-weight: theme.$font-weight-heading;
+    line-height: 47px;
+    letter-spacing: theme.$letter-spacing-heading;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.visual {
+  margin: 32px 0 0;
+  &:first-child {
+    margin-top: 0;
+    margin-bottom: 32px;
+  }
+}
+
+.projectImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 683px;
+  object-fit: contain;
+}
+
+.highlights {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding-left: 24px;
+
+  li {
+    padding-left: 4px;
+  }
+}
+
+.stack {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 40px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.resources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    gap: 20px;
+    border: 1px solid theme.$color-text;
+    border-radius: 2px;
+    padding: 12px 20px;
+    font-size: 16px;
+    text-decoration: none;
+
+    &:hover {
+      background: theme.$color-text;
+      color: theme.$color-background;
+    }
+  }
+}
+
+.footer {
+  margin-top: 48px;
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    text-underline-offset: 5px;
+  }
+}
+
+.nextProject {
+  display: grid;
+  gap: 10px;
+  border-top: 1px solid theme.$color-border;
+  margin-top: 48px;
+  padding: 28px 0;
+  text-decoration: none;
+
+  > span {
+    font-size: 14px;
+  }
+
+  strong {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-family: theme.$font-heading;
+    font-size: 24px;
+    font-weight: theme.$font-weight-heading;
+    line-height: 1.25;
+  }
+
+  &:hover strong {
+    text-decoration: underline;
+    text-underline-offset: 5px;
+  }
+}
+
+@media (max-width: 1320px) {
+  .contents {
+    position: static;
+    width: 100%;
+    margin-bottom: 40px;
+  }
+
+  .sectionNavigation {
+    position: static;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .header {
+    padding-top: 20px;
+
+    h1 {
+      margin-top: 28px;
+      padding: 0;
+    }
+  }
+
+  .projectNavigation {
+    position: static;
+  }
+
+  .contentLayout {
+    margin-top: 40px;
+  }
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding-bottom: 60px;
+  }
+
+  .header h1 {
+    font-size: 32px;
+    line-height: 1.15;
+  }
+
+  .sectionNavigation {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    a {
+      padding-inline: 8px;
+      font-size: 14px;
+    }
+  }
+
+  .section h2 {
+    margin-bottom: 24px;
+    font-size: 30px;
+    line-height: 1.2;
+  }
+
+  .stack {
+    gap: 10px 20px;
+    font-size: 16px;
+  }
+}
+
+@media print {
+  .page {
+    padding: 0;
+  }
+
+  .projectNavigation,
+  .contents,
+  .nextProject {
+    display: none;
+  }
+
+  .header {
+    padding-top: 0;
+  }
+
+  .header h1 {
+    color: black;
+  }
+
+  .contentLayout {
+    width: 100%;
+    margin-top: 32px;
+  }
+
+  .section h2 {
+    break-after: avoid;
+  }
+
+  .projectImage {
+    max-height: 350px;
+  }
+}

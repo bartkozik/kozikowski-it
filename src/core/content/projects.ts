@@ -14,7 +14,7 @@ export interface PortfolioProject {
   readonly demoUrl?: `https://${string}`;
 }
 
-export const projects: readonly PortfolioProject[] = [
+export const projects = [
   {
     slug: 'pm-traffic-manager',
     name: 'PM Traffic Manager',
@@ -140,4 +140,6 @@ export const projects: readonly PortfolioProject[] = [
       },
     ],
   },
-];
+] as const satisfies readonly PortfolioProject[];
+
+export type ProjectSlug = (typeof projects)[number]['slug'];

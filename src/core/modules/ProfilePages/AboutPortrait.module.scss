@@ -1,0 +1,87 @@
+@use '../../theme' as theme;
+
+.portrait {
+  width: 240px;
+  max-width: 100%;
+  margin: 0;
+  border: 1px solid theme.$color-border;
+  background: theme.$color-card;
+  box-shadow: 6px 6px 0 theme.$color-border;
+}
+
+.label,
+.caption {
+  padding: 12px;
+  font-family: theme.$font-metrics;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+}
+
+.label {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  border-bottom: 1px solid theme.$color-border;
+}
+
+.imageFrame {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.caption {
+  display: grid;
+  gap: 4px;
+  border-top: 1px solid theme.$color-border;
+
+  span:last-child {
+    color: theme.$color-muted;
+    font-size: 10px;
+  }
+}
+
+.portrait[data-punk] {
+  border-color: #41f6e6;
+  box-shadow: 6px 6px 0 #f56cda;
+  transform: rotate(-2deg);
+
+  .label {
+    border-color: #41f6e6;
+    color: #41f6e6;
+  }
+
+  .imageFrame::after {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(transparent 0 3px, #08061120 3px 4px);
+    content: '';
+    pointer-events: none;
+  }
+
+  .caption {
+    border-color: #f56cda;
+    color: #41f6e6;
+  }
+}
+
+@media (max-width: 600px) {
+  .portrait {
+    width: 260px;
+    justify-self: center;
+  }
+}
+
+@media print {
+  .portrait,
+  .portrait[data-punk] {
+    box-shadow: none;
+    transform: none;
+    break-inside: avoid;
+  }
+}

@@ -1,0 +1,88 @@
+@use '../../theme' as theme;
+
+.bar {
+  max-width: 2000px;
+  padding: 16px 40px 0;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+}
+.label {
+  color: theme.$color-muted;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.switch {
+  display: inline-flex;
+  gap: 3px;
+  padding: 3px;
+  background: theme.$color-card;
+  border: 1px solid theme.$color-border;
+  border-radius: 4px;
+  button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-width: 70px;
+    min-height: 34px;
+    padding: 4px 10px;
+    border: 0;
+    border-radius: 2px;
+    font: 500 12px / 1.5 theme.$font-body;
+    background: transparent;
+    color: theme.$color-muted;
+    cursor: pointer;
+    span {
+      font-size: 17px;
+    }
+    &:hover {
+      color: theme.$color-text;
+      background: var(--surface-hover);
+    }
+    &[aria-pressed='true'] {
+      background: theme.$color-text;
+      color: theme.$color-background;
+    }
+  }
+}
+:global(html[data-mode='punk']) {
+  .bar {
+    justify-content: space-between;
+  }
+  .label {
+    color: var(--neon-cyan);
+    font-family: monospace;
+  }
+  .switch {
+    border-color: var(--neon-cyan);
+    border-radius: 0;
+    box-shadow: 3px 3px 0 var(--neon-pink);
+  }
+  .switch button[aria-pressed='true'] {
+    background: theme.$color-accent;
+    color: #0b0712;
+  }
+}
+@media (max-width: 699px) {
+  .bar {
+    padding: 12px 20px 0;
+  }
+  .label {
+    display: none;
+  }
+  .switch button {
+    min-height: 40px;
+  }
+  :global(html[data-mode='punk']) .bar {
+    justify-content: flex-end;
+  }
+}
+@media print {
+  .bar {
+    display: none;
+  }
+}

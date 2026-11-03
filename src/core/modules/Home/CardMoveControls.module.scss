@@ -1,0 +1,102 @@
+@use '@/core/theme' as theme;
+
+.controls {
+  position: relative;
+
+  summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 33px;
+    padding: 3px 12px;
+    border: 1px solid theme.$color-border;
+    border-radius: 2px;
+    background: theme.$color-background;
+    color: theme.$color-text;
+    cursor: pointer;
+    list-style: none;
+    white-space: nowrap;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  summary:hover,
+  &[open] summary {
+    border-color: theme.$color-text;
+    background: theme.$color-text;
+    color: theme.$color-background;
+  }
+
+  &[open] summary svg {
+    transform: rotate(180deg);
+  }
+}
+
+.panel {
+  position: absolute;
+  z-index: 15;
+  top: calc(100% + 8px);
+  right: 0;
+  width: min(480px, calc(100vw - 80px));
+  box-shadow: 0 8px 24px rgb(0 0 0 / 15%);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  font-size: 13px;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid theme.$color-border;
+  background: theme.$color-card;
+
+  label {
+    grid-column: 1 / -1;
+  }
+
+  select {
+    min-width: 0;
+    max-width: 100%;
+    min-height: 44px;
+    padding: 8px;
+    color: theme.$color-text;
+    background: theme.$color-background;
+    border: 1px solid theme.$color-border;
+    font: inherit;
+  }
+}
+
+.directions {
+  display: flex;
+  gap: 4px;
+
+  button {
+    width: 44px;
+    height: 44px;
+    border: 1px solid theme.$color-border;
+    background: theme.$color-background;
+    color: theme.$color-text;
+    font: inherit;
+    font-size: 20px;
+    cursor: pointer;
+
+    &:hover {
+      background: theme.$color-text;
+      color: theme.$color-background;
+    }
+  }
+}
+
+@media (max-width: 1099px), (pointer: coarse) {
+  .controls {
+    display: none;
+  }
+}
+
+:global(html[data-mode='punk']) .controls {
+  summary {
+    font-family: monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+}

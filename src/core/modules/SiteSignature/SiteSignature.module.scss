@@ -1,0 +1,28 @@
+@use '../../theme' as theme;
+
+.signature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 28px;
+  color: theme.$color-muted;
+  font-family: theme.$font-metrics;
+  font-size: 13px;
+  line-height: 1.5;
+
+  img {
+    display: block;
+    width: 64px;
+    height: auto;
+  }
+}
+
+:global(html[data-mode='punk']) .signature {
+  color: var(--neon-cyan);
+}
+
+@media print {
+  .signature {
+    display: none;
+  }
+}

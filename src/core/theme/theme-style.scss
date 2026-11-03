@@ -1,6 +1,71 @@
 @use 'index' as theme;
 
-* {
+:root {
+  color-scheme: light;
+  --color-accent: #ea3323;
+  --color-link-accent: #c52719;
+  --color-background: #ffffff;
+  --color-card: #fefefe;
+  --color-text: #0d0d0d;
+  --color-muted: #444444;
+  --color-border: #c4c0c0;
+  --surface-hover: rgb(13 13 13 / 4.5%);
+  --card-translucent: rgb(254 254 254 / 96%);
+  --preview-background: #f4f3f0;
+  --type-preview: #eae7e1;
+  --ticker-text: #0d0d0d;
+}
+
+html[data-mode='night'] {
+  color-scheme: dark;
+  --color-accent: #ff7869;
+  --color-link-accent: #ff7869;
+  --color-background: #14161b;
+  --color-card: #1e2129;
+  --color-text: #f2f0eb;
+  --color-muted: #b1b5c1;
+  --color-border: #454955;
+  --surface-hover: rgb(242 240 235 / 6%);
+  --card-translucent: rgb(30 33 41 / 97%);
+  --preview-background: #262a34;
+  --type-preview: #292d38;
+}
+
+html[data-mode='punk'] {
+  color-scheme: dark;
+  --color-accent: #eaff55;
+  --color-link-accent: #eaff55;
+  --color-background: #0b0712;
+  --color-card: #171021;
+  --color-text: #f2eaf7;
+  --color-muted: #b9acc9;
+  --color-border: #63516e;
+  --surface-hover: #46f4e912;
+  --card-translucent: #171021f5;
+  --preview-background: #21182e;
+  --type-preview: #261833;
+  --neon-cyan: #46f4e9;
+  --neon-pink: #ff70d2;
+}
+
+html[data-mode='punk'] body {
+  background-image:
+    linear-gradient(#46f4e906 1px, transparent 1px), linear-gradient(90deg, #46f4e906 1px, transparent 1px),
+    radial-gradient(ellipse at 10% 0%, #ff2bba0d, transparent 50%);
+  background-size:
+    32px 32px,
+    32px 32px,
+    100% 100%;
+}
+
+html[data-mode='punk'] ::selection {
+  background: var(--neon-pink);
+  color: #0b0712;
+}
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -9,7 +74,10 @@ body {
   background: theme.$color-background;
   color: theme.$color-text;
   font-family: theme.$font-body;
-  line-height: 1.6;
+  font-size: theme.$font-size-body;
+  font-weight: theme.$font-weight-body;
+  line-height: theme.$line-height-body;
+  letter-spacing: theme.$letter-spacing-body;
 }
 
 a {
@@ -17,6 +85,112 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid currentColor;
+  outline: 2px solid theme.$color-accent;
   outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html {
+  scroll-padding-bottom: 80px;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 1000;
+  left: 16px;
+  top: -80px;
+  padding: 12px 20px;
+  background: theme.$color-card;
+  border: 2px solid currentColor;
+  &:focus {
+    top: 16px;
+  }
+}
+
+@media print {
+  .skip-link {
+    display: none;
+  }
+}
+
+@media print {
+  html[data-mode],
+  :root {
+    color-scheme: light;
+    --color-accent: #000000;
+    --color-link-accent: #000000;
+    --color-background: #ffffff;
+    --color-card: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-border: #999999;
+  }
+  html[data-mode='punk'] body {
+    background-image: none;
+  }
+}
+
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-group(.project-expand),
+::view-transition-group(.project-title),
+::view-transition-group(.project-image) {
+  animation-duration: 520ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-old(.project-expand) {
+  animation: project-dissolve 180ms ease-out both;
+}
+
+::view-transition-new(.project-expand) {
+  animation: project-reveal 320ms ease-out 100ms both;
+}
+
+::view-transition-image-pair(.project-image) {
+  overflow: hidden;
+}
+
+::view-transition-old(.project-image),
+::view-transition-new(.project-image) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+@keyframes project-dissolve {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes project-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
 }
