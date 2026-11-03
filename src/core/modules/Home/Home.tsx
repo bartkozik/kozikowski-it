@@ -18,6 +18,7 @@ import { PunkRadio } from '@/core/modules/Experience/PunkRadio';
 import { ImplantUpgrade } from '@/core/modules/Experience/ImplantUpgrade';
 
 import { projects } from '@/core/content/projects';
+import { getPunkProjectCopy } from '@/core/content/punk-project-copy';
 import { getProjectDetails } from '@/core/content/project-details';
 import { getProjectVisual } from '@/core/content/project-visuals';
 
@@ -400,7 +401,9 @@ export function Home() {
                     </Link>
                     <Image src="/assets/arrow-right-up.svg" width={24} height={24} alt="" />
                   </div>
-                  <p className={styles.tagline}>{project.tagline}</p>
+                  <p className={styles.tagline}>
+                    {(punk && getPunkProjectCopy(project.slug)?.tagline) || project.tagline}
+                  </p>
                   <Link className={styles.preview} href={`/projects/${project.slug}`} tabIndex={-1}>
                     {visual ? (
                       <Image
