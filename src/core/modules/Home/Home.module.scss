@@ -74,7 +74,8 @@
     justify-content: space-between;
     gap: 12px;
     text-decoration: none;
-    &:hover {
+    &:hover,
+    &[data-highlighted='true'] {
       color: theme.$color-accent;
     }
     span {
@@ -346,5 +347,21 @@
   }
   .tagline {
     font-size: 13px;
+  }
+}
+
+@media (min-width: 1100px) and (hover: hover) and (pointer: fine) {
+  .card {
+    transition: filter 160ms ease;
+
+    &[data-muted='true'] {
+      filter: blur(4px);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
   }
 }

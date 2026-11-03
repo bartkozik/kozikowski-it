@@ -45,6 +45,9 @@ export function Home() {
   const [order, setOrder] = useState(cardPresets.map((_, index) => index));
   const [arrangement, setArrangement] = useState<Arrangement>('original');
   const [announcement, setAnnouncement] = useState('');
+  const [hoveredProject, setHoveredProject] = useState<string | null>(null);
+  const [focusedProject, setFocusedProject] = useState<string | null>(null);
+  const highlightedProject = hoveredProject ?? focusedProject;
   const drag = useRef<DragState | null>(null);
   const [clickGuard] = useState(createDragClickGuard);
   const canvas = useRef<HTMLDivElement>(null);
@@ -200,9 +203,9 @@ export function Home() {
     } else {
       const featured =
         mode === 'loved'
-          ? ['epoca-landing-page', 'celina', 'pm-traffic-manager']
+          ? ['epoca', 'board-dev', 'pm-traffic-manager']
           : mode === 'painful'
-            ? ['art-network', 'board-dev', 'epoca']
+            ? ['ad-template-platform', 'art-network']
             : [];
       const arranged = cardPresets.map((position) => {
         const rank = featured.indexOf(position.slug);
@@ -223,8 +226,8 @@ export function Home() {
         : mode === 'shuffle'
           ? 'Cards shuffled.'
           : mode === 'loved'
-            ? 'Projects with end-to-end ownership brought to the front.'
-            : 'Projects with complex workflows brought to the front.',
+            ? 'EPOCA, Board.Dev and PM Traffic Manager brought to the front.'
+            : 'Ad Template Platform and Art Network brought to the front.',
     );
   }
 
@@ -243,7 +246,18 @@ export function Home() {
             <ul>
               {projects.map((project) => (
                 <li key={project.slug}>
-                  <Link href={`/projects/${project.slug}`}>
+                  <Link
+                    href={`/projects/${project.slug}`}
+                    data-highlighted={highlightedProject === project.slug || undefined}
+                    onPointerEnter={(event) => {
+                      if (event.pointerType !== 'touch') setHoveredProject(project.slug);
+                    }}
+                    onPointerLeave={() => setHoveredProject(null)}
+                    onFocus={(event) => {
+                      if (event.currentTarget.matches(':focus-visible')) setFocusedProject(project.slug);
+                    }}
+                    onBlur={() => setFocusedProject(null)}
+                  >
                     {project.name}
                     <span aria-hidden="true">↗</span>
                   </Link>
@@ -272,7 +286,7 @@ export function Home() {
               <button
                 type="button"
                 aria-pressed={arrangement === 'loved'}
-                title="Projects with end-to-end ownership"
+                title="EPOCA, Board.Dev and PM Traffic Manager"
                 onClick={() => arrange('loved')}
               >
                 Most loved
@@ -280,7 +294,7 @@ export function Home() {
               <button
                 type="button"
                 aria-pressed={arrangement === 'painful'}
-                title="Complex workflows and technical challenges"
+                title="Ad Template Platform and Art Network"
                 onClick={() => arrange('painful')}
               >
                 Most painful
@@ -309,7 +323,7 @@ export function Home() {
                 '--rotation': `${position.rotation}deg`,
                 '--image-ratio': preset.imageRatio,
                 '--mobile-order': projects.indexOf(project),
-                zIndex: order.indexOf(index) + 1,
+                zIndex: highlightedProject === project.slug ? cardPresets.length + 1 : order.indexOf(index) + 1,
               } as CSSProperties;
               return (
                 <article
@@ -319,7 +333,17 @@ export function Home() {
                     cards.current[index] = element;
                   }}
                   style={cardStyle}
-                  onFocus={() => bringToFront(index)}
+                  data-muted={(highlightedProject !== null && highlightedProject !== project.slug) || undefined}
+                  onPointerEnter={(event) => {
+                    if (event.pointerType !== 'touch') setHoveredProject(project.slug);
+                  }}
+                  onPointerLeave={() => setHoveredProject(null)}
+                  onFocus={(event) => {
+                    bringToFront(index);
+                    if (event.target instanceof HTMLElement && event.target.matches(':focus-visible'))
+                      setFocusedProject(project.slug);
+                  }}
+                  onBlur={() => setFocusedProject(null)}
                 >
                   <div className={styles.cardHeader}>
                     <Link
