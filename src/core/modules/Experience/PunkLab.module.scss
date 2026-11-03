@@ -85,17 +85,20 @@
 .scanReadout {
   color: theme.$color-accent;
 }
-.scan[data-upgraded] {
+.scan[data-stage='1'],
+.scan[data-stage='2'] {
   box-shadow: inset 0 0 35px #46f4e918;
 }
-.node {
-  fill: #0b0712;
-  stroke: var(--neon-pink);
-}
-.activeNode {
-  fill: theme.$color-accent;
-  stroke: theme.$color-accent;
-  filter: drop-shadow(0 0 5px #eaff55);
+.scan[data-stage='3'] {
+  border-color: var(--neon-pink);
+  background:
+    radial-gradient(ellipse at center, #ff2bba25, transparent 70%),
+    repeating-linear-gradient(0deg, transparent 0 4px, #46f4e90c 4px 5px);
+  box-shadow: inset 0 0 35px #ff2bba18;
+
+  .scanLabel {
+    color: var(--neon-pink);
+  }
 }
 .loadout {
   padding: 20px;
