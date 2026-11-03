@@ -167,8 +167,9 @@
   gap: 16px;
 }
 
-.printButton {
+.resumePdf {
   display: inline-flex;
+  text-decoration: none;
   min-height: 44px;
   align-items: center;
   gap: 16px;
@@ -324,7 +325,7 @@
   }
 
   .navigation,
-  .printButton {
+  .resumePdf {
     display: none;
   }
 

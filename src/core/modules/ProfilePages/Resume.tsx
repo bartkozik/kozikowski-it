@@ -1,6 +1,5 @@
 import { profile } from '@/core/content/profile';
 
-import { PrintButton } from './PrintButton';
 import { ProfileLinks } from './ProfileLinks';
 import { ProfilePageShell } from './ProfilePageShell';
 import styles from './ProfilePages.module.scss';
@@ -10,7 +9,15 @@ export function Resume() {
     <ProfilePageShell title="Resume" subtitle={`${profile.name} · ${profile.title}`} activePage="resume">
       <div className={styles.resumeToolbar}>
         <a href={profile.contactHref}>{profile.email}</a>
-        <PrintButton />
+        <a
+          className={styles.resumePdf}
+          href="/documents/Bartosz_Kozikowski_CV_Fullstack_EN.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Open the PDF in a new tab to print or download"
+        >
+          Print resume (PDF) <span aria-hidden="true">↗</span>
+        </a>
       </div>
       <p className={styles.resumeDetails}>
         {profile.location} · {profile.availability} · English {profile.english}
