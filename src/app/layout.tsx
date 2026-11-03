@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 
 import { ExperienceProvider } from '@/core/modules/Experience/ExperienceProvider';
 import { ModeSwitch } from '@/core/modules/Experience/ModeSwitch';
+import { PunkRadio } from '@/core/modules/Experience/PunkRadio';
 import { modeBootstrap } from '@/core/modules/Experience/interface-mode';
 
 import { MetricsBar } from '@/core/modules/MetricsBar';
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <ExperienceProvider>
           <ModeSwitch />
           {children}
+          <PunkRadio />
           <MetricsBar />
         </ExperienceProvider>
       </body>
