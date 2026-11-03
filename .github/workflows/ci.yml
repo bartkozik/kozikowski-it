@@ -10,7 +10,7 @@ permissions:
 
 concurrency:
   group: quality-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   quality:
@@ -19,14 +19,94 @@ jobs:
     env:
       NEXT_TELEMETRY_DISABLED: '1'
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - run: npm run format:check
-      - run: npm run lint
-      - run: npm test
-      - run: npm run typecheck
-      - run: npm run build
+      - run: npm run check
+
+  image:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version-file: .nvmrc
+      - name: Build runtime image
+        run: docker build --build-arg APP_REVISION="$GITHUB_SHA" --tag "ghcr.io/$GITHUB_REPOSITORY:sha-$GITHUB_SHA" .
+      - name: Test runtime image
+        env:
+          EXPECTED_REVISION: ${{ github.sha }}
+        run: bash scripts/test-container.sh "ghcr.io/$GITHUB_REPOSITORY:sha-$GITHUB_SHA"
+      - name: Export tested image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: docker save "ghcr.io/$GITHUB_REPOSITORY:sha-$GITHUB_SHA" | gzip > "$RUNNER_TEMP/image.tar.gz"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        with:
+          name: runtime-image
+          path: ${{ runner.temp }}/image.tar.gz
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: error
+
+  publish:
+    needs: [quality, image]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      digest: ${{ steps.publish.outputs.digest }}
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: runtime-image
+          path: ${{ runner.temp }}/image
+      - name: Publish tested image
+        id: publish
+        env:
+          REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          trap 'docker logout ghcr.io >/dev/null' EXIT
+          printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+          gzip --decompress --stdout "$RUNNER_TEMP/image/image.tar.gz" | docker load
+          image="ghcr.io/$GITHUB_REPOSITORY:sha-$GITHUB_SHA"
+          docker push "$image"
+          reference=$(docker image inspect --format '{{index .RepoDigests 0}}' "$image")
+          digest=${reference##*@}
+          [[ "$digest" =~ ^sha256:[a-f0-9]{64}$ ]]
+          printf 'digest=%s\n' "$digest" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    needs: publish
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.PRODUCTION_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: production
+      url: https://kozikowski.it
+    concurrency:
+      group: production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Deploy immutable image
+        env:
+          IMAGE_DIGEST: ${{ needs.publish.outputs.digest }}
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: bash scripts/deploy-image.sh
