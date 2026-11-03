@@ -333,6 +333,7 @@
   }
   .header {
     align-items: start;
+    flex-wrap: wrap;
     gap: 16px;
     h1 {
       max-width: 240px;

@@ -2,7 +2,7 @@
 
 import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useExperience } from './ExperienceProvider';
 import styles from './PunkRadio.module.scss';
 
@@ -20,6 +20,11 @@ function RadioReceiver() {
   const minimized = view === 'minimized';
   const [showTracks, setShowTracks] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
+  const panelControl = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (view === 'expanded') panelControl.current?.focus();
+  }, [view]);
 
   function disconnect() {
     setView('closed');
@@ -57,6 +62,7 @@ function RadioReceiver() {
                 <button
                   className={styles.close}
                   type="button"
+                  ref={panelControl}
                   onClick={minimize}
                   aria-label="Minimize radio"
                   title="Minimize radio"
