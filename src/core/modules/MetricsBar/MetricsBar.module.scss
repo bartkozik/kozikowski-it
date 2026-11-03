@@ -8,7 +8,7 @@
   display: flex;
   align-items: center;
   background: theme.$color-accent;
-  color: theme.$color-text;
+  color: var(--ticker-text);
   font-family: theme.$font-metrics;
   font-size: theme.$font-size-metrics;
   font-weight: theme.$font-weight-metrics;
@@ -112,6 +112,7 @@
 }
 
 .tooltip {
+  color: theme.$color-text;
   position: fixed;
   bottom: 72px;
   width: min(360px, calc(100% - 24px));

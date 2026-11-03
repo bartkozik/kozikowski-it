@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
+import { ExperienceProvider } from '@/core/modules/Experience/ExperienceProvider';
+import { ModeSwitch } from '@/core/modules/Experience/ModeSwitch';
+import { modeBootstrap } from '@/core/modules/Experience/interface-mode';
+
 import { MetricsBar } from '@/core/modules/MetricsBar';
 import { fontVariables } from '@/core/theme/fonts';
 
@@ -23,13 +27,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en" className={fontVariables}>
+    <html lang="en" className={fontVariables} data-mode="day" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: modeBootstrap }} />
+      </head>
       <body>
         <a className="skip-link" href="#main-content">
           Skip to content
         </a>
-        {children}
-        <MetricsBar />
+        <ExperienceProvider>
+          <ModeSwitch />
+          {children}
+          <MetricsBar />
+        </ExperienceProvider>
       </body>
     </html>
   );

@@ -12,6 +12,10 @@ import {
   type PointerEvent,
 } from 'react';
 
+import { useExperience } from '@/core/modules/Experience/ExperienceProvider';
+import { PunkLab } from '@/core/modules/Experience/PunkLab';
+import { ImplantUpgrade } from '@/core/modules/Experience/ImplantUpgrade';
+
 import { projects } from '@/core/content/projects';
 import { getProjectDetails } from '@/core/content/project-details';
 import { getProjectVisual } from '@/core/content/project-visuals';
@@ -41,6 +45,8 @@ type DragState = {
 };
 
 export function Home() {
+  const { mode, loadout } = useExperience();
+  const punk = mode === 'punk';
   const [positions, setPositions] = useState<readonly CardPosition[]>(cardPresets);
   const [order, setOrder] = useState(cardPresets.map((_, index) => index));
   const [arrangement, setArrangement] = useState<Arrangement>('original');
@@ -243,10 +249,11 @@ export function Home() {
           Contact <span aria-hidden="true">↗</span>
         </Link>
       </header>
+      {punk && <PunkLab />}
       <div className={styles.workspace}>
         <aside className={styles.sidebar}>
           <nav aria-label="Portfolio">
-            <h2>Projects</h2>
+            <h2>{punk ? 'Implant catalogue' : 'Projects'}</h2>
             <ul>
               {projects.map((project) => (
                 <li key={project.slug}>
@@ -341,6 +348,7 @@ export function Home() {
                     cards.current[index] = element;
                   }}
                   style={cardStyle}
+                  data-installed={(punk && loadout.installed.includes(project.slug)) || undefined}
                   data-highlighted={highlightedProject === project.slug || undefined}
                   onAnimationEnd={(event) => {
                     if (event.target === event.currentTarget && index === cardPresets.length - 1)
@@ -406,6 +414,7 @@ export function Home() {
                       </div>
                     )}
                   </Link>
+                  {punk && <ImplantUpgrade slug={project.slug} />}
                 </article>
               );
             })}
