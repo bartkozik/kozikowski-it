@@ -1,5 +1,7 @@
 'use client';
 
+import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
+
 import Link from 'next/link';
 
 import { useExperience } from '@/core/modules/Experience/ExperienceProvider';
@@ -32,7 +34,10 @@ export function Home() {
       <header className={styles.header}>
         <h1>Bartosz Kozikowski</h1>
         <Link className={styles.contact} href="/contact">
-          Contact <span aria-hidden="true">↗</span>
+          Contact{' '}
+          <span aria-hidden="true">
+            <ArrowIcon />
+          </span>
         </Link>
       </header>
       {punk && <PunkLab />}
@@ -56,17 +61,25 @@ export function Home() {
                     onBlur={() => setFocusedProject(null)}
                   >
                     {project.name}
-                    <span aria-hidden="true">↗</span>
+                    <span aria-hidden="true">
+                      <ArrowIcon />
+                    </span>
                   </Link>
                 </li>
               ))}
             </ul>
             <div className={styles.personalLinks}>
               <Link href="/about">
-                About me <span aria-hidden="true">↗</span>
+                About me{' '}
+                <span aria-hidden="true">
+                  <ArrowIcon />
+                </span>
               </Link>
               <Link href="/resume">
-                Resume <span aria-hidden="true">↗</span>
+                Resume{' '}
+                <span aria-hidden="true">
+                  <ArrowIcon />
+                </span>
               </Link>
             </div>
           </nav>
@@ -98,7 +111,10 @@ export function Home() {
                 Most painful
               </button>
               <button type="button" className={styles.shuffle} onClick={() => arrange('shuffle')}>
-                Shuffle <span aria-hidden="true">↝</span>
+                Shuffle{' '}
+                <span aria-hidden="true">
+                  <ArrowIcon direction="shuffle" />
+                </span>
               </button>
             </div>
             <button type="button" className={styles.reset} onClick={() => arrange('original')}>

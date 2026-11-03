@@ -1,5 +1,7 @@
 'use client';
 
+import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
+
 import { useExperience } from './ExperienceProvider';
 import { getImplant } from './implants';
 import { creditsRemaining, IMPLANT_SLOTS } from './loadout';
@@ -36,7 +38,7 @@ export function ImplantUpgrade({ slug }: { slug: string }) {
         onClick={() => dispatch({ type: installed ? 'remove' : 'install', slug })}
       >
         <span>
-          {action} {installed ? '−' : '↗'}
+          {action} {installed ? <span aria-hidden="true">−</span> : <ArrowIcon size={16} />}
         </span>
         <span>
           {installed ? '+' : ''}

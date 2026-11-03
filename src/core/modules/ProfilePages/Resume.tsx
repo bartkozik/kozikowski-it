@@ -1,3 +1,4 @@
+import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
 import { profile } from '@/core/content/profile';
 import { punkProfileCopy } from '@/core/content/punk-profile-copy';
 import { ModeCopy } from '@/core/modules/Experience/ModeCopy';
@@ -22,7 +23,10 @@ export function Resume() {
           rel="noopener noreferrer"
           title="Open the PDF in a new tab to print or download"
         >
-          Print resume (PDF) <span aria-hidden="true">↗</span>
+          Print resume (PDF){' '}
+          <span aria-hidden="true">
+            <ArrowIcon />
+          </span>
         </a>
       </div>
       <p className={styles.resumeDetails}>

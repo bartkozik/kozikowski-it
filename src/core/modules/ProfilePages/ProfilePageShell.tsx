@@ -1,3 +1,4 @@
+import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
@@ -22,7 +23,10 @@ export function ProfilePageShell({ title, subtitle, activePage, children }: Prof
       <header className={styles.header}>
         <div className={styles.navigation}>
           <Link href="/" className={styles.backLink}>
-            <span aria-hidden="true">←</span> All projects
+            <span aria-hidden="true">
+              <ArrowIcon direction="left" />
+            </span>{' '}
+            All projects
           </Link>
           <nav aria-label="Profile navigation">
             {navigation.map((item) => (

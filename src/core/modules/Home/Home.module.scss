@@ -172,9 +172,6 @@
   gap: 12px;
   align-items: center;
   justify-content: space-between;
-  img {
-    flex-shrink: 0;
-  }
 }
 .cardTitle {
   color: theme.$color-text;
@@ -446,11 +443,6 @@
   .toolbar button:hover {
     translate: 0;
   }
-}
-
-:global(html[data-mode='night']) .cardHeader img,
-:global(html[data-mode='punk']) .cardHeader img {
-  filter: invert(1);
 }
 
 :global(html[data-mode='night']) .card {

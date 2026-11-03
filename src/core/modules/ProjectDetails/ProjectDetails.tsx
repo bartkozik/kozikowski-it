@@ -1,3 +1,4 @@
+import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ViewTransition } from 'react';
@@ -37,14 +38,20 @@ export function ProjectDetails({ project, details, nextProject }: ProjectDetails
         <header className={styles.header}>
           <nav className={styles.projectNavigation} aria-label="Project navigation">
             <Link href="/" className={styles.backLink}>
-              <span aria-hidden="true">←</span> <ModeCopy punk="Catalogue">All projects</ModeCopy>
+              <span aria-hidden="true">
+                <ArrowIcon direction="left" />
+              </span>{' '}
+              <ModeCopy punk="Catalogue">All projects</ModeCopy>
             </Link>
             <Link
               href={`/projects/${nextProject.slug}`}
               aria-label={`Next project: ${nextProject.name}`}
               className={styles.nextLink}
             >
-              Next project <span aria-hidden="true">→</span>
+              Next project{' '}
+              <span aria-hidden="true">
+                <ArrowIcon direction="right" />
+              </span>
             </Link>
           </nav>
           <ViewTransition name={`project-title-${project.slug}`} share="project-title" default="none">
@@ -152,14 +159,20 @@ export function ProjectDetails({ project, details, nextProject }: ProjectDetails
                 {project.resources.map((resource) => (
                   <li key={resource.url}>
                     <a href={resource.url}>
-                      {resource.label} <span aria-hidden="true">↗</span>
+                      {resource.label}{' '}
+                      <span aria-hidden="true">
+                        <ArrowIcon />
+                      </span>
                     </a>
                   </li>
                 ))}
                 {project.demoUrl && (
                   <li>
                     <a href={project.demoUrl}>
-                      Live demo <span aria-hidden="true">↗</span>
+                      Live demo{' '}
+                      <span aria-hidden="true">
+                        <ArrowIcon />
+                      </span>
                     </a>
                   </li>
                 )}
@@ -178,7 +191,10 @@ export function ProjectDetails({ project, details, nextProject }: ProjectDetails
                   <ModeCopy punk="Next dossier">Next project</ModeCopy>
                 </span>
                 <strong>
-                  {nextProject.name} <span aria-hidden="true">→</span>
+                  {nextProject.name}{' '}
+                  <span aria-hidden="true">
+                    <ArrowIcon direction="right" />
+                  </span>
                 </strong>
               </Link>
             </footer>

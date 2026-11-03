@@ -1,5 +1,7 @@
 'use client';
 
+import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
+
 import Link from 'next/link';
 import { useEffect, useId, useRef, useState } from 'react';
 
@@ -148,7 +150,10 @@ export function MetricsBar() {
       }}
     >
       <Link href="/metrics" className={styles.detailsLink}>
-        Site metrics <span aria-hidden="true">↗</span>
+        Site metrics{' '}
+        <span aria-hidden="true">
+          <ArrowIcon />
+        </span>
       </Link>
       <div
         className={styles.viewport}

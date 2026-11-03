@@ -1,3 +1,4 @@
+import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
 import { profile } from '@/core/content/profile';
 import { ModeCopy } from '@/core/modules/Experience/ModeCopy';
 
@@ -24,7 +25,10 @@ export function Contact() {
           </ModeCopy>
         </p>
         <a className={styles.email} href={profile.contactHref}>
-          {profile.email} <span aria-hidden="true">↗</span>
+          {profile.email}{' '}
+          <span aria-hidden="true">
+            <ArrowIcon />
+          </span>
         </a>
         <dl className={styles.contactDetails}>
           <div>

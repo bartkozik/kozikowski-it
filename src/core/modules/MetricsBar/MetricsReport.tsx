@@ -1,3 +1,4 @@
+import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
 import Link from 'next/link';
 
 import { siteMetricDefinitions, siteMetrics } from '@/core/content/site-metrics';
@@ -10,7 +11,10 @@ export function MetricsReport() {
     <main className={styles.page} id="main-content">
       <header className={styles.header}>
         <Link href="/" className={styles.backLink}>
-          <span aria-hidden="true">←</span> All projects
+          <span aria-hidden="true">
+            <ArrowIcon direction="left" />
+          </span>{' '}
+          All projects
         </Link>
         <h1>Site metrics</h1>
         <p>Performance, page size and automated audit results for this portfolio.</p>

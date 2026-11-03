@@ -1,3 +1,4 @@
+import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ViewTransition, type CSSProperties } from 'react';
@@ -97,7 +98,7 @@ export function ProjectCard({ project, index, board }: ProjectCardProps) {
               {project.name}
             </Link>
           </ViewTransition>
-          <Image src="/assets/arrow-right-up.svg" width={24} height={24} alt="" />
+          <ArrowIcon />
         </div>
         <p className={styles.tagline}>{(punk && getPunkProjectCopy(project.slug)?.tagline) || project.tagline}</p>
         <ViewTransition name={`project-image-${project.slug}`} share="project-image" default="none">
@@ -122,7 +123,7 @@ export function ProjectCard({ project, index, board }: ProjectCardProps) {
                   {project.resources.some((resource) => resource.kind === 'source')
                     ? 'Explore the application & source'
                     : 'Explore the case study'}{' '}
-                  ↗
+                  <ArrowIcon size={16} />
                 </span>
               </div>
             )}

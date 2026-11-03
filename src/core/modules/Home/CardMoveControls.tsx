@@ -1,3 +1,4 @@
+import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
 import { useId, useState } from 'react';
 
 import { projects } from '@/core/content/projects';
@@ -8,12 +9,7 @@ import type { MoveDirection } from './board-layout';
 import type { useProjectBoard } from './useProjectBoard';
 import styles from './CardMoveControls.module.scss';
 
-const directions = [
-  { direction: 'left', symbol: '←' },
-  { direction: 'up', symbol: '↑' },
-  { direction: 'down', symbol: '↓' },
-  { direction: 'right', symbol: '→' },
-] satisfies readonly { direction: MoveDirection; symbol: string }[];
+const directions = ['left', 'up', 'down', 'right'] as const satisfies readonly MoveDirection[];
 
 export function CardMoveControls({ board }: { readonly board: ReturnType<typeof useProjectBoard> }) {
   const selectId = useId();
@@ -43,14 +39,14 @@ export function CardMoveControls({ board }: { readonly board: ReturnType<typeof 
           ))}
         </select>
         <div className={styles.directions} role="group" aria-label={`Move ${selected.name}`}>
-          {directions.map(({ direction, symbol }) => (
+          {directions.map((direction) => (
             <button
               key={direction}
               type="button"
               aria-label={`Move ${selected.name} ${direction}`}
               onClick={() => board.nudgeCard(index, direction)}
             >
-              <span aria-hidden="true">{symbol}</span>
+              <ArrowIcon direction={direction} />
             </button>
           ))}
         </div>

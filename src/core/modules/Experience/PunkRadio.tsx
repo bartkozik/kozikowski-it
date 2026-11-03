@@ -1,5 +1,7 @@
 'use client';
 
+import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
+
 import { useRef, useState } from 'react';
 import { useExperience } from './ExperienceProvider';
 import styles from './PunkRadio.module.scss';
@@ -88,7 +90,7 @@ function RadioReceiver() {
                 {showTracks ? '− Hide tracklist' : '+ Tracklist'}
               </button>
               <a href={playlistUrl} target="_blank" rel="noreferrer">
-                Spotify ↗
+                Spotify <ArrowIcon size={16} />
               </a>
             </div>
           </>

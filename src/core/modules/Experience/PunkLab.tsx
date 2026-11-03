@@ -1,5 +1,7 @@
 'use client';
 
+import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
+
 import { useExperience } from './ExperienceProvider';
 import { getImplant } from './implants';
 import { creditsRemaining, IMPLANT_SLOTS } from './loadout';
@@ -91,7 +93,7 @@ export function PunkLab() {
           })}
         </ol>
         <button className={styles.reboot} type="button" onClick={() => dispatch({ type: 'reset' })}>
-          ↻ Reboot humanity
+          <ArrowIcon direction="reset" size={20} /> Reboot humanity
         </button>
       </div>
       <div className={styles.console} role="status" aria-live="polite">
