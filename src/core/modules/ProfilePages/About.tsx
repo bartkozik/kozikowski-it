@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import { profile } from '@/core/content/profile';
 
+import { AboutPortrait } from './AboutPortrait';
 import { ProfileLinks } from './ProfileLinks';
 import { ProfilePageShell } from './ProfilePageShell';
 import styles from './ProfilePages.module.scss';
@@ -9,10 +10,13 @@ import styles from './ProfilePages.module.scss';
 export function About() {
   return (
     <ProfilePageShell title="About me" subtitle={`${profile.name} · ${profile.title}`} activePage="about">
-      <div className={styles.prose}>
-        {profile.about.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
+      <div className={styles.aboutIntro}>
+        <AboutPortrait />
+        <div className={styles.prose}>
+          {profile.about.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
       </div>
 
       <section className={styles.section} aria-labelledby="experience-heading">

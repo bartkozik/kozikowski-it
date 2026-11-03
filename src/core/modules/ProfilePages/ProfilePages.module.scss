@@ -72,6 +72,13 @@
   }
 }
 
+.aboutIntro {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  align-items: start;
+  gap: 40px;
+}
+
 .prose {
   display: grid;
   gap: 24px;
@@ -274,6 +281,11 @@
 }
 
 @media (max-width: 600px) {
+  .aboutIntro {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+
   .page {
     padding-bottom: 60px;
   }
