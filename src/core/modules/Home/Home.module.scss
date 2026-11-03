@@ -602,3 +602,7 @@
     padding-top: 12px;
   }
 }
+
+.card[hidden] {
+  display: none;
+}

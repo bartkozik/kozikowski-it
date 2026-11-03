@@ -33,10 +33,10 @@ import {
   type CardDimensions,
 } from './board-layout';
 import { cardPresets } from './card-presets';
+import { isProjectVisible, nextArrangement, projectFilters, type Arrangement } from './project-filters';
 import { createDragClickGuard } from './drag-click-guard';
 import styles from './Home.module.scss';
 
-type Arrangement = 'original' | 'loved' | 'painful' | 'shuffle';
 type DragState = {
   index: number;
   pointerId: number;
@@ -57,7 +57,9 @@ export function Home() {
   const [entranceComplete, setEntranceComplete] = useState(false);
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [focusedProject, setFocusedProject] = useState<string | null>(null);
-  const highlightedProject = hoveredProject ?? focusedProject;
+  const highlightCandidate = focusedProject ?? hoveredProject;
+  const highlightedProject =
+    highlightCandidate && isProjectVisible(highlightCandidate, arrangement) ? highlightCandidate : null;
   const drag = useRef<DragState | null>(null);
   const [clickGuard] = useState(createDragClickGuard);
   const canvas = useRef<HTMLDivElement>(null);
@@ -70,10 +72,10 @@ export function Home() {
     const stageWidth = stageBounds?.width;
     if (!stageWidth || cards.current.filter(Boolean).length !== cardPresets.length) return null;
     const scale = stageWidth / BOARD_WIDTH;
-    const measured = cards.current.map((card) => ({
-      width: card!.offsetWidth / scale,
-      height: card!.offsetHeight / scale,
-    }));
+    const measured = cards.current.map((card, index) => {
+      if (card!.hidden && dimensions.current[index]) return dimensions.current[index];
+      return { width: card!.offsetWidth / scale, height: card!.offsetHeight / scale };
+    });
     dimensions.current = measured;
     boardHeight.current = stageBounds.height / scale;
     return { scale, dimensions: measured, height: boardHeight.current };
@@ -212,21 +214,19 @@ export function Home() {
     setAnnouncement('Card moved. Press Enter to open the project.');
   }
 
-  function arrange(mode: Arrangement) {
+  function arrange(requested: Arrangement) {
+    const mode = nextArrangement(arrangement, requested);
     setEntranceComplete(true);
     const measurement = measureCards();
     if (!measurement) return;
     setArrangement(mode);
+    setHoveredProject(null);
+    setFocusedProject(null);
     if (mode === 'shuffle') {
       setPositions(shuffledPositions(measurement.dimensions, Math.random, measurement.height));
       setOrder(cardPresets.map((_, index) => index));
     } else {
-      const featured =
-        mode === 'loved'
-          ? ['epoca', 'board-dev', 'pm-traffic-manager']
-          : mode === 'painful'
-            ? ['ad-template-platform', 'art-network']
-            : [];
+      const featured = mode === 'loved' || mode === 'painful' ? projectFilters[mode] : [];
       const arranged = cardPresets.map((position) => {
         const rank = featured.indexOf(position.slug);
         return rank < 0
@@ -242,12 +242,12 @@ export function Home() {
     }
     setAnnouncement(
       mode === 'original'
-        ? 'Original layout restored.'
+        ? 'All projects shown. Original layout restored.'
         : mode === 'shuffle'
-          ? 'Cards shuffled.'
+          ? 'All projects shown and shuffled.'
           : mode === 'loved'
-            ? 'EPOCA, Board.Dev and PM Traffic Manager brought to the front.'
-            : 'Ad Template Platform and Art Network brought to the front.',
+            ? 'Showing 3 projects: EPOCA, Board.Dev and PM Traffic Manager.'
+            : 'Showing 2 projects: Ad Template Platform and Art Network.',
     );
   }
 
@@ -368,6 +368,7 @@ export function Home() {
                 >
                   <article
                     className={styles.card}
+                    hidden={!isProjectVisible(project.slug, arrangement)}
                     ref={(element) => {
                       cards.current[index] = element;
                     }}
