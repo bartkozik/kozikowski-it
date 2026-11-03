@@ -14,6 +14,7 @@ import {
 
 import { useExperience } from '@/core/modules/Experience/ExperienceProvider';
 import { PunkLab } from '@/core/modules/Experience/PunkLab';
+import { PunkRadio } from '@/core/modules/Experience/PunkRadio';
 import { ImplantUpgrade } from '@/core/modules/Experience/ImplantUpgrade';
 
 import { projects } from '@/core/content/projects';
@@ -257,7 +258,12 @@ export function Home() {
           Contact <span aria-hidden="true">↗</span>
         </Link>
       </header>
-      {punk && <PunkLab />}
+      {punk && (
+        <>
+          <PunkLab />
+          <PunkRadio />
+        </>
+      )}
       <div className={styles.workspace}>
         <aside className={styles.sidebar}>
           <nav aria-label="Portfolio">
