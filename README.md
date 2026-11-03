@@ -62,3 +62,17 @@ To include a timed successful build, pass `--build-time /tmp/portfolio-build.jso
 ```
 
 Replace the example fields with the recorded build result; omit `--build-time` when no build measurement is available.
+
+## Container
+
+```sh
+docker build --tag kozikowski-it:local .
+bash scripts/test-container.sh kozikowski-it:local
+docker run --rm --publish 127.0.0.1:3000:3000 kozikowski-it:local
+```
+
+The runtime contains the standalone Next.js build and public assets, runs as an unprivileged user and exposes `/healthz`. Container smoke checks cover all project routes, JavaScript, the resume PDF and image optimization.
+
+Pull requests must pass `quality` and `image`. A push to `main` publishes the exact tested image to `ghcr.io/bartkozik/kozikowski-it`, tagged with the commit SHA. Deployments use its immutable digest.
+
+Production infrastructure is maintained in [portfolio-infra](https://github.com/bartkozik/portfolio-infra). Set repository variable `PRODUCTION_ENABLED=true` only after commissioning the VPS. The `production` environment requires variable `DEPLOY_HOST` and secrets `DEPLOY_SSH_KEY` and `DEPLOY_KNOWN_HOSTS`. Obtain the SSH host fingerprint through a trusted OVH console; deployments enforce host-key verification. Configure package visibility or host-side registry read access before the first deployment.
