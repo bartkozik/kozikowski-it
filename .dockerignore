@@ -1,0 +1,15 @@
+**
+!package.json
+!package-lock.json
+!tsconfig.json
+!next.config.ts
+!src/
+!src/**
+!public/
+!public/**
+**/.env*
+**/AGENTS*.md
+**/SKILL.md
+**/*.pem
+**/*.key
+**/.DS_Store
