@@ -30,7 +30,7 @@ export function AboutPortrait() {
       </div>
       <figcaption className={styles.caption}>
         <span>{punk ? 'WARSAW NODE' : 'WARSAW, POLAND'}</span>
-        <span>{punk ? 'HUMAN, AUGMENTED' : 'DEVELOPER & HUMAN'}</span>
+        <span>{punk ? 'HUMAN, AUGMENTED' : 'FULL STACK DEVELOPER'}</span>
       </figcaption>
     </figure>
   );
