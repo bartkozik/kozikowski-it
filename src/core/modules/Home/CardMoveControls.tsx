@@ -1,5 +1,5 @@
 import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
 import { projects } from '@/core/content/projects';
 
@@ -13,6 +13,17 @@ const directions = ['left', 'up', 'down', 'right'] as const satisfies readonly M
 
 export function CardMoveControls({ board }: { readonly board: ReturnType<typeof useProjectBoard> }) {
   const selectId = useId();
+  const disclosure = useRef<HTMLDetailsElement>(null);
+  const trigger = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    function dismiss(event: PointerEvent) {
+      const panel = disclosure.current;
+      if (panel?.open && event.target instanceof Node && !panel.contains(event.target)) panel.open = false;
+    }
+    document.addEventListener('pointerdown', dismiss);
+    return () => document.removeEventListener('pointerdown', dismiss);
+  }, []);
   const [selectedSlug, setSelectedSlug] = useState<string>(projects[0].slug);
   const visibleProjects = projects.filter((project) => isProjectVisible(project.slug, board.visibleArrangement));
   const selected = visibleProjects.find((project) => project.slug === selectedSlug) ?? visibleProjects[0];
@@ -20,8 +31,20 @@ export function CardMoveControls({ board }: { readonly board: ReturnType<typeof 
   const index = cardPresets.findIndex((preset) => preset.slug === selected.slug);
 
   return (
-    <details className={styles.controls}>
-      <summary>Move a card</summary>
+    <details
+      className={styles.controls}
+      ref={disclosure}
+      onKeyDown={(event) => {
+        if (event.key === 'Escape' && event.currentTarget.open) {
+          event.preventDefault();
+          event.currentTarget.open = false;
+          trigger.current?.focus();
+        }
+      }}
+    >
+      <summary ref={trigger}>
+        Move a card <ArrowIcon direction="down" size={16} />
+      </summary>
       <div className={styles.panel}>
         <label htmlFor={selectId}>Project to move</label>
         <select

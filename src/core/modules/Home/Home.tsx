@@ -124,12 +124,12 @@ export function Home() {
                   <ArrowIcon direction="shuffle" />
                 </span>
               </button>
+              <CardMoveControls board={board} />
             </div>
             <button type="button" className={styles.reset} onClick={() => arrange('original')}>
               Reset layout
             </button>
           </div>
-          <CardMoveControls board={board} />
           <p className={styles.instructions} id="card-instructions">
             Drag a title or use Move a card. Click a title to explore.{' '}
             <span>Keyboard: arrow keys to move, Enter to open.</span>
