@@ -1,0 +1,24 @@
+@use '@/core/theme' as theme;
+
+.home {
+  max-width: 50rem;
+  margin-inline: auto;
+  padding: clamp(1.5rem, 6vw, 5rem);
+
+  h1 {
+    margin-block: 1rem;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+  }
+
+  a {
+    display: inline-block;
+    margin-top: 1.5rem;
+    text-underline-offset: 0.25em;
+  }
+}
+
+.label {
+  color: theme.$color-muted;
+}
