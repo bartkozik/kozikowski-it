@@ -9,6 +9,7 @@ import { gzipSync } from 'node:zlib';
 import { format, resolveConfig } from 'prettier';
 
 const lighthouseVersion = '13.6.0';
+const validDate = (value) => (typeof value === 'string' && Number.isFinite(Date.parse(value)) ? value : null);
 const finiteValue = (value) => (typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : null);
 const score = (category) => {
   const value = finiteValue(category?.score);
@@ -95,6 +96,7 @@ export function createMeasurement(report, javascriptGzip, build) {
     .join('; ');
   const browserVersion = report.environment?.hostUserAgent?.match(/(?:HeadlessChrome|Chrome)\/([\d.]+)/)?.[1];
   const buildTime = build?.exitCode === 0 ? finiteValue(build.durationSeconds) : null;
+  const buildRecordedAt = buildTime !== null ? validDate(build.recordedAt) : null;
   const notes = [
     'One local production-page run. TTFB, FCP and load time are observed trace timings; Lighthouse category scores use the report throttling profile.',
     'TTFB uses the observed time-to-first-byte subpart from the Lighthouse LCP breakdown. Load time uses its observed loadEventEnd timing.',
@@ -102,13 +104,13 @@ export function createMeasurement(report, javascriptGzip, build) {
   ];
   if (buildTime !== null) {
     notes.push(
-      `Build: ${build.profile ?? 'production build'}${build.recordedAt ? `; measured at ${build.recordedAt}` : ''}.`,
+      `Build: ${build.profile ?? 'production build'}${buildRecordedAt ? `; measured at ${buildRecordedAt}` : ''}.`,
     );
   }
   if (Array.isArray(report.runWarnings)) notes.push(...report.runWarnings);
   return {
-    recordedAt: report.fetchTime ?? null,
-    buildRecordedAt: buildTime !== null ? (build.recordedAt ?? null) : null,
+    recordedAt: validDate(report.fetchTime),
+    buildRecordedAt,
     environment: 'Local production build (localhost)',
     target: target.href,
     profile: profile || null,

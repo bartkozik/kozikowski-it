@@ -22,6 +22,7 @@ import { getProjectVisual } from '@/core/content/project-visuals';
 
 import {
   BOARD_WIDTH,
+  BOARD_HEIGHT,
   constrainPosition,
   constrainPositions,
   movedBeyondThreshold,
@@ -60,9 +61,11 @@ export function Home() {
   const canvas = useRef<HTMLDivElement>(null);
   const cards = useRef<(HTMLElement | null)[]>([]);
   const dimensions = useRef<readonly CardDimensions[]>([]);
+  const boardHeight = useRef(BOARD_HEIGHT);
 
   const measureCards = useCallback(() => {
-    const stageWidth = canvas.current?.getBoundingClientRect().width;
+    const stageBounds = canvas.current?.getBoundingClientRect();
+    const stageWidth = stageBounds?.width;
     if (!stageWidth || cards.current.filter(Boolean).length !== cardPresets.length) return null;
     const scale = stageWidth / BOARD_WIDTH;
     const measured = cards.current.map((card) => ({
@@ -70,7 +73,8 @@ export function Home() {
       height: card!.offsetHeight / scale,
     }));
     dimensions.current = measured;
-    return { scale, dimensions: measured };
+    boardHeight.current = stageBounds.height / scale;
+    return { scale, dimensions: measured, height: boardHeight.current };
   }, []);
 
   useEffect(() => {
@@ -83,7 +87,8 @@ export function Home() {
       frame = 0;
       if (!desktop.matches) return;
       const measurement = measureCards();
-      if (measurement) setPositions((current) => constrainPositions(current, measurement.dimensions));
+      if (measurement)
+        setPositions((current) => constrainPositions(current, measurement.dimensions, measurement.height));
     }
 
     function scheduleMeasurement() {
@@ -147,6 +152,7 @@ export function Home() {
       },
       size.width,
       size.height,
+      boardHeight.current,
     );
     setPositions((current) => current.map((item, index) => (index === active.index ? position : item)));
   }
@@ -160,6 +166,7 @@ export function Home() {
         constrainPositions(
           current.map((item, index) => (index === active.index ? active.position : item)),
           dimensions.current,
+          boardHeight.current,
         ),
       );
     if (active.moved)
@@ -195,6 +202,7 @@ export function Home() {
               },
               size.width,
               size.height,
+              boardHeight.current,
             )
           : position,
       ),
@@ -208,7 +216,7 @@ export function Home() {
     if (!measurement) return;
     setArrangement(mode);
     if (mode === 'shuffle') {
-      setPositions(shuffledPositions(measurement.dimensions, Math.random));
+      setPositions(shuffledPositions(measurement.dimensions, Math.random, measurement.height));
       setOrder(cardPresets.map((_, index) => index));
     } else {
       const featured =
@@ -223,7 +231,7 @@ export function Home() {
           ? position
           : { ...position, x: 60 + rank * 330, y: rank === 1 ? 150 : 70, rotation: rank === 1 ? 4 : -3 };
       });
-      setPositions(constrainPositions(arranged, measurement.dimensions));
+      setPositions(constrainPositions(arranged, measurement.dimensions, measurement.height));
       const indices = cardPresets.map((_, index) => index);
       setOrder([
         ...indices.filter((index) => !featured.includes(cardPresets[index].slug)),
@@ -322,8 +330,9 @@ export function Home() {
             Drag a title to move a card. Click to explore. <span>Keyboard: arrow keys to move, Enter to open.</span>
           </p>
           <div className={styles.canvas} ref={canvas} data-entering={!entranceComplete || undefined}>
-            {cardPresets.map((preset, index) => {
-              const project = projects.find((item) => item.slug === preset.slug)!;
+            {projects.map((project) => {
+              const index = cardPresets.findIndex((preset) => preset.slug === project.slug);
+              const preset = cardPresets[index];
               const visual = getProjectVisual(project.slug);
               const details = getProjectDetails(project.slug);
               const position = positions[index];
@@ -333,7 +342,6 @@ export function Home() {
                 '--width': preset.width,
                 '--rotation': `${position.rotation}deg`,
                 '--image-ratio': preset.imageRatio,
-                '--mobile-order': projects.indexOf(project),
                 '--entrance-delay': `${index * 45}ms`,
                 '--entrance-x': `${index % 2 === 0 ? -100 : 100}px`,
                 '--entrance-y': `${index % 3 === 0 ? -120 : 140}px`,

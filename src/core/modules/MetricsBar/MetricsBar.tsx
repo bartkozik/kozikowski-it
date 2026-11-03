@@ -87,7 +87,6 @@ export function MetricsBar() {
   }, [paused]);
 
   useEffect(() => {
-    if (!active) return;
     function dismiss(event: PointerEvent) {
       if (event.target instanceof Node && !footer.current?.contains(event.target)) {
         setActive(null);
@@ -104,7 +103,7 @@ export function MetricsBar() {
       document.removeEventListener('pointerdown', dismiss);
       window.removeEventListener('resize', close);
     };
-  }, [active]);
+  }, []);
 
   function showMetric(metric: SiteMetricDefinition, element: HTMLElement) {
     const rect = element.getBoundingClientRect();

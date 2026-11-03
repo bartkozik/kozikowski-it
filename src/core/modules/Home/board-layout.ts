@@ -12,14 +12,19 @@ export interface CardDimensions {
   readonly height: number;
 }
 
-export function constrainPosition(position: CardPosition, width: number, height: number): CardPosition {
+export function constrainPosition(
+  position: CardPosition,
+  width: number,
+  height: number,
+  boardHeight = BOARD_HEIGHT,
+): CardPosition {
   const radians = (position.rotation * Math.PI) / 180;
   const horizontal = Math.sin(radians) * height;
   const vertical = Math.sin(radians) * width;
   const minX = 24 + Math.max(0, horizontal);
   const maxX = BOARD_WIDTH - 24 - Math.cos(radians) * width + Math.min(0, horizontal);
   const minY = 24 - Math.min(0, vertical);
-  const maxY = BOARD_HEIGHT - 24 - Math.cos(radians) * height - Math.max(0, vertical);
+  const maxY = boardHeight - 24 - Math.cos(radians) * height - Math.max(0, vertical);
   const x = Math.max(minX, Math.min(maxX, position.x));
   const y = Math.max(minY, Math.min(maxY, position.y));
 
@@ -29,10 +34,11 @@ export function constrainPosition(position: CardPosition, width: number, height:
 export function constrainPositions(
   positions: readonly CardPosition[],
   dimensions: readonly CardDimensions[],
+  boardHeight = BOARD_HEIGHT,
 ): readonly CardPosition[] {
   const next = positions.map((position, index) => {
     const size = dimensions[index];
-    return size ? constrainPosition(position, size.width, size.height) : position;
+    return size ? constrainPosition(position, size.width, size.height, boardHeight) : position;
   });
 
   return next.every((position, index) => position === positions[index]) ? positions : next;
@@ -42,7 +48,11 @@ export function movedBeyondThreshold(start: { x: number; y: number }, end: { x: 
   return Math.hypot(end.x - start.x, end.y - start.y) > 5;
 }
 
-export function shuffledPositions(dimensions: readonly CardDimensions[], random: () => number): CardPosition[] {
+export function shuffledPositions(
+  dimensions: readonly CardDimensions[],
+  random: () => number,
+  boardHeight = BOARD_HEIGHT,
+): CardPosition[] {
   return dimensions.map(({ width, height }, index) =>
     constrainPosition(
       {
@@ -52,6 +62,7 @@ export function shuffledPositions(dimensions: readonly CardDimensions[], random:
       },
       width,
       height,
+      boardHeight,
     ),
   );
 }

@@ -77,3 +77,14 @@ test('build timestamp belongs to a successful build, never to the page audit', (
   assert.equal(createMeasurement(report, null, { ...build, exitCode: 1 }).buildRecordedAt, null);
   assert.equal(createMeasurement(report, null, { durationSeconds: 8, exitCode: 0 }).buildRecordedAt, null);
 });
+
+test('invalid measurement dates cannot reach the tooltip date formatter', () => {
+  const measured = createMeasurement({ ...report, fetchTime: 'invalid-date' }, null, {
+    durationSeconds: 8,
+    exitCode: 0,
+    recordedAt: 'ISO-8601 timestamp of the actual build',
+  });
+  assert.equal(measured.recordedAt, null);
+  assert.equal(measured.buildRecordedAt, null);
+  assert.ok(measured.notes.every((note) => !note.includes('ISO-8601 timestamp')));
+});

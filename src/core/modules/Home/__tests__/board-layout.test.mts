@@ -87,3 +87,12 @@ test('resize reclamps a card that becomes taller in board coordinates without ch
     resized,
   );
 });
+
+test('the taller Punk board uses its measured height when dragging and reclamping', () => {
+  const dragged = constrainPosition({ x: 200, y: 2000, rotation: 0 }, 430, 370, 1700);
+  assert.equal(dragged.y, 1306);
+  const positions = [dragged];
+  const dimensions = [{ width: 430, height: 370 }];
+  assert.strictEqual(constrainPositions(positions, dimensions, 1700), positions);
+  assert.equal(constrainPositions(positions, dimensions, 1300)[0].y, 906);
+});
