@@ -13,7 +13,10 @@
     "typecheck": "next typegen && tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run format:check && npm run lint && npm run typecheck && npm run build"
+    "check": "npm run format:check && npm run lint && npm run test && npm run typecheck && npm run build",
+    "test": "node --test \"src/**/*.test.mts\" \"scripts/**/*.test.mjs\"",
+    "metrics:audit": "npm exec --yes --package=lighthouse@13.6.0 -- lighthouse http://127.0.0.1:3100 --preset=desktop --output=json --chrome-flags=--headless",
+    "metrics:measure": "node scripts/measure-site.mjs"
   },
   "dependencies": {
     "next": "16.4.4",
@@ -30,5 +33,6 @@
     "prettier": "3.9.10",
     "sass": "1.107.1",
     "typescript": "~5.9.3"
-  }
+  },
+  "type": "module"
 }

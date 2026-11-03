@@ -1,0 +1,88 @@
+@use '../../theme' as theme;
+
+.footer {
+  position: fixed;
+  z-index: 20;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 60px;
+  background: theme.$color-accent;
+  color: theme.$color-text;
+  font-family: theme.$font-metrics;
+  font-size: theme.$font-size-metrics;
+  font-weight: theme.$font-weight-metrics;
+  line-height: 29px;
+  letter-spacing: normal;
+}
+
+.scrollArea {
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: theme.$color-text transparent;
+
+  &:focus-visible {
+    outline: 2px solid theme.$color-text;
+    outline-offset: -4px;
+  }
+}
+
+.metrics {
+  display: flex;
+  width: max-content;
+  min-height: 52px;
+  align-items: center;
+  gap: 32px;
+  margin: 0;
+  padding: 4px 32px;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 32px;
+  white-space: nowrap;
+}
+
+.separator {
+  display: block;
+  width: 20px;
+  height: 29px;
+  flex: 0 0 20px;
+  background: url('/assets/smiley.svg') center / contain no-repeat;
+}
+
+.detailsLink {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 12px;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+
+  &:focus-visible {
+    outline-color: theme.$color-text;
+    outline-offset: 2px;
+  }
+}
+
+@media (max-width: 600px) {
+  .metrics {
+    gap: 24px;
+    padding-inline: 20px;
+  }
+
+  .item {
+    gap: 24px;
+  }
+}
+
+@media print {
+  .footer {
+    display: none;
+  }
+}

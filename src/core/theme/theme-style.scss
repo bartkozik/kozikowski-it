@@ -1,6 +1,8 @@
 @use 'index' as theme;
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -9,7 +11,10 @@ body {
   background: theme.$color-background;
   color: theme.$color-text;
   font-family: theme.$font-body;
-  line-height: 1.6;
+  font-size: theme.$font-size-body;
+  font-weight: theme.$font-weight-body;
+  line-height: theme.$line-height-body;
+  letter-spacing: theme.$letter-spacing-body;
 }
 
 a {
@@ -17,6 +22,40 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid currentColor;
+  outline: 2px solid theme.$color-accent;
   outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html {
+  scroll-padding-bottom: 80px;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 1000;
+  left: 16px;
+  top: -80px;
+  padding: 12px 20px;
+  background: white;
+  border: 2px solid currentColor;
+  &:focus {
+    top: 16px;
+  }
+}
+
+@media print {
+  .skip-link {
+    display: none;
+  }
 }
