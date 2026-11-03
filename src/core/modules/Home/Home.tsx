@@ -13,6 +13,7 @@ import { cardPresets } from './card-presets';
 import { ProjectCard } from './ProjectCard';
 import { CardMoveControls } from './CardMoveControls';
 import { useProjectBoard } from './useProjectBoard';
+import { useChaosShuffle } from './useChaosShuffle';
 import styles from './Home.module.scss';
 
 export function Home() {
@@ -31,6 +32,7 @@ export function Home() {
     setFocusedProject,
     arrange,
   } = board;
+  const chaos = useChaosShuffle(punk, canvas, () => arrange('shuffle'));
   return (
     <main className={styles.home} id="main-content">
       <header className={styles.header}>
@@ -100,6 +102,7 @@ export function Home() {
                 type="button"
                 aria-pressed={arrangement === 'loved'}
                 title="EPOCA, Board.Dev and PM Traffic Manager"
+                disabled={chaos.scrambling}
                 onPointerEnter={(event) => previewFilter(event, 'loved')}
                 onPointerLeave={clearFilterPreview}
                 onPointerCancel={clearFilterPreview}
@@ -111,6 +114,7 @@ export function Home() {
                 type="button"
                 aria-pressed={arrangement === 'painful'}
                 title="Ad Template Platform and Art Network"
+                disabled={chaos.scrambling}
                 onPointerEnter={(event) => previewFilter(event, 'painful')}
                 onPointerLeave={clearFilterPreview}
                 onPointerCancel={clearFilterPreview}
@@ -118,23 +122,41 @@ export function Home() {
               >
                 Most painful
               </button>
-              <button type="button" className={styles.shuffle} onClick={() => arrange('shuffle')}>
-                Shuffle{' '}
+              <button type="button" className={styles.shuffle} disabled={chaos.scrambling} onClick={chaos.run}>
+                {punk ? (chaos.scrambling ? 'SCRAMBLING…' : 'CHAOS PROTOCOL') : 'Shuffle'}{' '}
                 <span aria-hidden="true">
                   <ArrowIcon direction="shuffle" />
                 </span>
               </button>
-              <CardMoveControls board={board} />
+              <div inert={chaos.scrambling || undefined}>
+                <CardMoveControls board={board} />
+              </div>
             </div>
-            <button type="button" className={styles.reset} onClick={() => arrange('original')}>
-              Reset layout
+            <button
+              type="button"
+              className={styles.reset}
+              disabled={chaos.scrambling}
+              onClick={() => arrange('original')}
+            >
+              {punk ? 'RESTORE SANITY' : 'Reset layout'}
             </button>
           </div>
           <p className={styles.instructions} id="card-instructions">
             Drag a title or use Move a card. Click a title to explore.{' '}
             <span>Keyboard: arrow keys to move, Enter to open.</span>
           </p>
-          <div className={styles.canvas} ref={canvas} data-entering={!entranceComplete || undefined}>
+          {punk && (
+            <p className={styles.chaosStatus} role="status">
+              {chaos.scrambling ? '// INJECTING ENTROPY…' : chaos.message || '// CHAOS ENGINE ARMED.'}
+            </p>
+          )}
+          <div
+            className={styles.canvas}
+            ref={canvas}
+            inert={chaos.scrambling || undefined}
+            data-scrambling={chaos.scrambling || undefined}
+            data-entering={!entranceComplete || undefined}
+          >
             {projects.map((project) => (
               <ProjectCard
                 key={project.slug}

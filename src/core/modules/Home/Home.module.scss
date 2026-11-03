@@ -131,6 +131,7 @@
 }
 .sortButtons {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
 }
 .toolbar .reset {
@@ -550,4 +551,28 @@
 
 .card[hidden] {
   display: none;
+}
+
+.chaosStatus {
+  margin: -12px 0 20px;
+  min-height: 1.5em;
+  color: var(--neon-cyan);
+  font: 11px / 1.5 monospace;
+  letter-spacing: 0.06em;
+}
+
+.canvas[data-scrambling] {
+  overflow: clip;
+  overflow-clip-margin: 12px;
+
+  .card {
+    transition: none;
+    filter: none;
+    will-change: transform;
+  }
+}
+
+.toolbar button:disabled {
+  cursor: wait;
+  opacity: 0.65;
 }
