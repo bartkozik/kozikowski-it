@@ -29,3 +29,5 @@ updates:
     ignore:
       - dependency-name: '@types/node'
         update-types: [version-update:semver-major]
+      - dependency-name: typescript
+        versions: ['>=7 <8']
