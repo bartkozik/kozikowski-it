@@ -5,39 +5,15 @@ import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
 import Link from 'next/link';
 import { useEffect, useId, useRef, useState } from 'react';
 
-import { siteMetricDefinitions, siteMetrics, type SiteMetricDefinition } from '@/core/content/site-metrics';
+import { siteMetricDefinitions, type SiteMetricDefinition } from '@/core/content/site-metrics';
 
 import { formatMetricValue } from './metric-format';
+import { useVisitorMetrics } from './use-visitor-metrics';
 import { advanceTicker, tooltipLeft } from './ticker-layout';
 import styles from './MetricsBar.module.scss';
 
-const measurementDate = new Intl.DateTimeFormat('en-GB', {
-  dateStyle: 'medium',
-  timeStyle: 'medium',
-  timeZone: 'Europe/Warsaw',
-});
-
-const metricDetails = {
-  ttfb: 'Observed first-byte timing from the navigation trace. This local result excludes public hosting and internet latency.',
-  fcp: 'The first text, image or other content painted by the browser. Observed trace timing, not a simulated score.',
-  loadTime:
-    'Observed loadEventEnd. This marks the page load event, not the end of every animation or lazy-loaded image.',
-  pageWeight:
-    'Transferred resources in this navigation, reported by Lighthouse total-byte-weight. Other routes are excluded.',
-  javascriptGzip:
-    'Each unique, successfully loaded same-origin script compressed separately with gzip level 9. Excludes third-party scripts and response headers.',
-  buildTime:
-    'Elapsed production build time. Machine speed and compiler cache affect this result; it is not page loading time.',
-  lighthousePerformance:
-    'A weighted laboratory performance score using simulated throttling. It is not a percentage of real visitors with a fast experience.',
-  lighthouseAccessibility:
-    'Automated accessibility checks. Keyboard, screen-reader and usability reviews remain separate from this score.',
-  lighthouseSeo:
-    'Technical checks that help search engines understand a page. This score does not predict search ranking.',
-  lighthouseBestPractices: 'Automated browser and web-development checks. This is not a security audit.',
-} satisfies Record<SiteMetricDefinition['key'], string>;
-
 export function MetricsBar() {
+  const measurement = useVisitorMetrics();
   const footer = useRef<HTMLElement>(null);
   const viewport = useRef<HTMLDivElement>(null);
   const cycle = useRef<HTMLUListElement>(null);
@@ -116,8 +92,9 @@ export function MetricsBar() {
     });
   }
 
-  const recordedAt = active?.metric.key === 'buildTime' ? siteMetrics.buildRecordedAt : siteMetrics.recordedAt;
-  const value = active ? siteMetrics.values[active.metric.key] : null;
+  const reading = active ? measurement.metrics[active.metric.key] : null;
+  const recordedAt = reading?.recordedAt;
+  const value = reading?.value ?? null;
 
   return (
     <footer
@@ -187,7 +164,7 @@ export function MetricsBar() {
                     onFocus={(event) => showMetric(metric, event.currentTarget)}
                     onClick={(event) => showMetric(metric, event.currentTarget)}
                   >
-                    {metric.label}: {formatMetricValue(siteMetrics.values[metric.key], metric.unit)}
+                    {metric.label}: {formatMetricValue(measurement.metrics[metric.key].value, metric.unit)}
                   </button>
                 </li>
               ))}
@@ -210,16 +187,16 @@ export function MetricsBar() {
       </button>
       {active && (
         <div className={styles.tooltip} role="tooltip" id={tooltipId} style={{ left: active.left }}>
-          <span className={styles.eyebrow}>Recorded snapshot · {siteMetrics.runs ?? '—'} run</span>
+          <span className={styles.eyebrow}>Live · your browser</span>
           <h2>{active.metric.label}</h2>
           <strong className={styles.value}>{formatMetricValue(value, active.metric.unit)}</strong>
-          <p>{metricDetails[active.metric.key]}</p>
+          <p>{active.metric.description}</p>
           <dl>
             <div>
               <dt>Measured</dt>
               <dd>
                 {recordedAt ? (
-                  <time dateTime={recordedAt}>{measurementDate.format(new Date(recordedAt))} · Warsaw</time>
+                  <time dateTime={new Date(recordedAt).toISOString()}>{new Date(recordedAt).toLocaleString()}</time>
                 ) : (
                   'Not recorded'
                 )}
@@ -230,33 +207,20 @@ export function MetricsBar() {
                 <dt>Raw value</dt>
                 <dd>
                   {value.toLocaleString('en-US', { maximumFractionDigits: 3 })}{' '}
-                  {active.metric.unit === 'score' ? '/ 100' : active.metric.unit}
+                  {active.metric.unit === 'ratio' ? '(unitless)' : active.metric.unit}
                 </dd>
               </div>
             )}
             <div>
-              <dt>Environment</dt>
-              <dd>{siteMetrics.environment ?? 'Not recorded'}</dd>
+              <dt>Page opened</dt>
+              <dd>{measurement.page ?? 'Waiting for browser measurements'}</dd>
             </div>
             <div>
-              <dt>
-                {active.metric.key === 'buildTime'
-                  ? 'Build profile'
-                  : active.metric.unit === 'score'
-                    ? 'Audit profile'
-                    : 'Capture profile'}
-              </dt>
-              <dd>
-                {active.metric.key === 'buildTime'
-                  ? (siteMetrics.notes.find((note) => note.startsWith('Build:')) ?? 'Not recorded')
-                  : (siteMetrics.profile ?? 'Not recorded')}
-              </dd>
-            </div>
-            <div>
-              <dt>Tools</dt>
-              <dd>{siteMetrics.tools ?? 'Not recorded'}</dd>
+              <dt>Scope</dt>
+              <dd>This document visit, including in-app navigation. Refresh to start a new measurement.</dd>
             </div>
           </dl>
+          {value === null && <p>Waiting for a measurement. Some metrics require interaction or browser support.</p>}
         </div>
       )}
     </footer>

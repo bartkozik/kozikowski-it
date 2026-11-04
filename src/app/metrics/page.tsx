@@ -4,8 +4,7 @@ import { MetricsReport } from '@/core/modules/MetricsBar';
 
 export const metadata: Metadata = {
   title: { absolute: 'Site metrics — Bartosz Kozikowski' },
-  description:
-    'Recorded performance, page size and Lighthouse results, including the measurement environment and profile.',
+  description: 'Live performance measurements for your visit, collected in your browser without sending analytics.',
 };
 
 export default function MetricsPage() {

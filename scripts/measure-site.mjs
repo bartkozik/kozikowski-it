@@ -2,11 +2,9 @@ import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import { arch, platform } from 'node:os';
 import { resolve } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
 import { gzipSync } from 'node:zlib';
-
-import { format, resolveConfig } from 'prettier';
 
 const lighthouseVersion = '13.6.0';
 const validDate = (value) => (typeof value === 'string' && Number.isFinite(Date.parse(value)) ? value : null);
@@ -144,7 +142,7 @@ async function main() {
   });
   if (values.help || !values.report) {
     console.log(
-      'Usage: npm run metrics:measure -- --report <lighthouse.json> [--build-time <build.json>] [--output <site-metrics.ts>]',
+      'Usage: npm run metrics:measure -- --report <lighthouse.json> [--build-time <build.json>] [--output <measurement.json>]',
     );
     if (!values.help) process.exitCode = 1;
     return;
@@ -155,17 +153,11 @@ async function main() {
   createMeasurement(report, null, build);
   const measurement = createMeasurement(report, await measureJavaScript(report), build);
   measurement.notes.push(`Lighthouse report SHA-256: ${createHash('sha256').update(reportSource).digest('hex')}.`);
-  const output = values.output
-    ? resolve(values.output)
-    : fileURLToPath(new URL('../src/core/content/site-metrics.ts', import.meta.url));
-  const source = await readFile(output, 'utf8');
-  const record = /export const siteMetrics: SiteMeasurement = \{[\s\S]*?\n\};/;
-  if (!record.test(source)) throw new Error('Could not find the existing typed siteMetrics record in the output file.');
-  const updated = source.replace(
-    record,
-    () => `export const siteMetrics: SiteMeasurement = ${JSON.stringify(measurement, null, 2)};`,
-  );
-  await writeFile(output, await format(updated, { ...(await resolveConfig(output)), filepath: output }));
+  if (values.output) {
+    const output = resolve(values.output);
+    if (!output.endsWith('.json')) throw new Error('Offline measurements must be saved as a JSON report.');
+    await writeFile(output, `${JSON.stringify(measurement, null, 2)}\n`);
+  }
   console.log(JSON.stringify(measurement, null, 2));
 }
 
