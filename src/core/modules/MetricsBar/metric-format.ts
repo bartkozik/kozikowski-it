@@ -3,7 +3,7 @@ import type { SiteMetricUnit } from '../../content/site-metrics';
 const numberFormat = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
 
 export function formatMetricValue(value: number | null, unit: SiteMetricUnit): string {
-  if (value === null || !Number.isFinite(value) || value < 0 || (unit === 'score' && value > 100)) {
+  if (value === null || !Number.isFinite(value) || value < 0) {
     return 'Not measured';
   }
 
@@ -13,9 +13,8 @@ export function formatMetricValue(value: number | null, unit: SiteMetricUnit): s
     return `${numberFormat.format(value / divisor)} ${suffix}`;
   }
 
-  if (unit === 'score') {
-    return `${numberFormat.format(value)}/100`;
-  }
+  if (unit === 'ratio') return new Intl.NumberFormat('en-US', { maximumFractionDigits: 3 }).format(value);
+  if (unit === 'count') return numberFormat.format(value);
 
   return `${numberFormat.format(value)} ${unit}`;
 }

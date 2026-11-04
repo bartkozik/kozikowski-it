@@ -10,7 +10,7 @@ Projects appear as a stack of draggable cards. Each opens a page with the projec
 - Switch between Day, Night and Punk modes. Punk adds an implant catalogue, animated card shuffle and a Spotify radio.
 - Browse project galleries, experience and contact details, or download the PDF resume.
 
-Animations respect the system’s reduced-motion preference. Performance figures shown on the site come from recorded Lighthouse audits of local production builds; they are not live monitoring data.
+Animations respect the system’s reduced-motion preference. The metrics bar measures each visit in the browser: Web Vitals, load time and same-origin resource transfers. Measurements stay in memory and are not sent to an analytics service.
 
 ## Local development
 
