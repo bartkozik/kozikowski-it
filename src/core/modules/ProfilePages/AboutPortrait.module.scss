@@ -31,8 +31,24 @@
   overflow: hidden;
 }
 
-.image {
-  object-fit: cover;
+.dayImage,
+.punkImage {
+  position: absolute;
+  inset: 0;
+}
+
+.punkImage {
+  display: none;
+}
+
+:global(html[data-mode='punk']) {
+  .dayImage {
+    display: none;
+  }
+
+  .punkImage {
+    display: block;
+  }
 }
 
 .caption {

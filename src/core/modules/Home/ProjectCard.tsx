@@ -1,5 +1,5 @@
 import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
-import Image from 'next/image';
+import { ProgressiveImage } from '@/core/modules/ProgressiveImage/ProgressiveImage';
 import Link from 'next/link';
 import { ViewTransition, type CSSProperties } from 'react';
 
@@ -104,11 +104,11 @@ export function ProjectCard({ project, index, board }: ProjectCardProps) {
         <ViewTransition name={`project-image-${project.slug}`} share="project-image" default="none">
           <Link className={styles.preview} href={`/projects/${project.slug}`} tabIndex={-1}>
             {visual ? (
-              <Image
-                src={visual.src}
+              <ProgressiveImage
+                src={visual}
                 alt={visual.alt}
-                width={visual.width}
-                height={visual.height}
+                fill
+                position="top"
                 sizes="(max-width: 699px) 90vw, (max-width: 1099px) 45vw, 30vw"
                 draggable={false}
                 loading={['liquid-editions', 'fanimani', 'board-dev'].includes(project.slug) ? 'eager' : 'lazy'}
