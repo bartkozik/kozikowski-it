@@ -1,3 +1,5 @@
+import type { StaticImageData } from 'next/image';
+
 import accountingUiPrototypeImage from '../../../public/projects/accounting-ui-prototype.webp';
 import adTemplatePlatformImage from '../../../public/projects/ad-template-platform.webp';
 import artNetworkImage from '../../../public/projects/art-network.webp';
@@ -9,11 +11,8 @@ import fanimaniImage from '../../../public/projects/fanimani.webp';
 import liquidEditionsImage from '../../../public/projects/liquid-editions.webp';
 import pmTrafficManagerImage from '../../../public/projects/pm-traffic-manager.webp';
 
-export interface ProjectVisual {
-  readonly src: string;
+export interface ProjectVisual extends StaticImageData {
   readonly alt: string;
-  readonly width: number;
-  readonly height: number;
 }
 
 const visuals: Readonly<Record<string, ProjectVisual>> = {

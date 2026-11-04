@@ -1,5 +1,5 @@
 import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
-import Image from 'next/image';
+import { ProgressiveImage } from '@/core/modules/ProgressiveImage/ProgressiveImage';
 import Link from 'next/link';
 import { ViewTransition } from 'react';
 
@@ -77,11 +77,12 @@ export function ProjectDetails({ project, details, nextProject }: ProjectDetails
             {visual && (
               <ViewTransition name={`project-image-${project.slug}`} share="project-image" default="none">
                 <figure className={styles.visual}>
-                  <Image
-                    src={visual.src}
+                  <ProgressiveImage
+                    src={visual}
                     alt={visual.alt}
-                    width={visual.width}
-                    height={visual.height}
+                    fit="contain"
+                    loading="eager"
+                    fetchPriority="high"
                     sizes="(max-width: 950px) calc(100vw - 40px), 910px"
                     className={styles.projectImage}
                   />
@@ -113,11 +114,10 @@ export function ProjectDetails({ project, details, nextProject }: ProjectDetails
 
             {gallery.map((image) => (
               <figure key={image.src} className={styles.visual}>
-                <Image
-                  src={image.src}
+                <ProgressiveImage
+                  src={image}
                   alt={image.alt}
-                  width={image.width}
-                  height={image.height}
+                  fit="contain"
                   sizes="(max-width: 950px) calc(100vw - 40px), 910px"
                   className={styles.projectImage}
                 />
