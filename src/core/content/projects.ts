@@ -19,6 +19,7 @@ export const projects = [
     slug: 'pm-traffic-manager',
     name: 'PM Traffic Manager',
     tagline: 'Fullstack capacity and revenue planning MVP',
+    demoUrl: 'https://traffic.kozikowski.it',
     resources: [
       {
         kind: 'source',
