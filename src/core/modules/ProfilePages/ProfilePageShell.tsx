@@ -19,7 +19,12 @@ const navigation = [
 
 export function ProfilePageShell({ title, subtitle, activePage, children }: ProfilePageShellProps) {
   return (
-    <main className={styles.page} id="main-content">
+    <main
+      className={styles.page}
+      id="main-content"
+      tabIndex={-1}
+      data-portfolio-page={activePage === 'about' || activePage === 'resume' || undefined}
+    >
       <header className={styles.header}>
         <div className={styles.navigation}>
           <Link href="/" className={styles.backLink}>
