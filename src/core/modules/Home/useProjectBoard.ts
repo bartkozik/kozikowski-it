@@ -307,7 +307,6 @@ export function useProjectBoard() {
     moveCard,
     endDrag,
     keyboardMove,
-    nudgeCard,
     arrange,
   };
 }
