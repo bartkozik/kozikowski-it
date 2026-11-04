@@ -33,7 +33,7 @@
     "eslint-config-prettier": "^10",
     "prettier": "3.9.10",
     "sass": "1.107.1",
-    "typescript": "~5.9.3"
+    "typescript": "~7.0.2"
   },
   "type": "module"
 }
