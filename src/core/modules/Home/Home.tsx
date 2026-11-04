@@ -11,7 +11,6 @@ import { projects } from '@/core/content/projects';
 
 import { cardPresets } from './card-presets';
 import { ProjectCard } from './ProjectCard';
-import { CardMoveControls } from './CardMoveControls';
 import { useProjectBoard } from './useProjectBoard';
 import { useChaosShuffle } from './useChaosShuffle';
 import styles from './Home.module.scss';
@@ -135,9 +134,6 @@ export function Home() {
                   <ArrowIcon direction="shuffle" />
                 </span>
               </button>
-              <div inert={chaos.scrambling || undefined}>
-                <CardMoveControls board={board} />
-              </div>
             </div>
             <button
               type="button"
@@ -149,7 +145,7 @@ export function Home() {
             </button>
           </div>
           <p className={styles.instructions} id="card-instructions">
-            Drag a title or use Move a card. Click a title to explore.{' '}
+            Drag a title to move a card. Click a title to explore.{' '}
             <span>Keyboard: arrow keys to move, Enter to open.</span>
           </p>
           {punk && (

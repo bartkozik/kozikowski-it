@@ -3,7 +3,7 @@ import { test } from 'node:test';
 
 import * as layout from '../board-layout.ts';
 
-test('direction controls move cards by the requested step without changing rotation', () => {
+test('directional movement shifts cards by the requested step without changing rotation', () => {
   assert.equal(typeof layout.nudgePosition, 'function');
   const start = { x: 200, y: 200, rotation: 5 };
   const size = { width: 430, height: 370 };
@@ -18,7 +18,7 @@ test('direction controls move cards by the requested step without changing rotat
   assert.equal(layout.nudgePosition(start, 'right', size, 1300, 60).x, 260);
 });
 
-test('repeated direction clicks cannot push cards beyond the board', () => {
+test('repeated directional movements cannot push cards beyond the board', () => {
   assert.equal(typeof layout.nudgePosition, 'function');
   let position = { x: 24, y: 24, rotation: 0 };
   const size = { width: 430, height: 370 };
