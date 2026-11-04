@@ -95,7 +95,14 @@ export function Home() {
           </p>
           <SiteSignature />
         </aside>
-        <section className={styles.board} aria-label="Project cards">
+        <section className={styles.board} aria-label="Project cards" id="projects">
+          <nav className={styles.mobileNavigation} aria-label="Portfolio sections">
+            <Link href="#projects" aria-current="page">
+              Projects
+            </Link>
+            <Link href="/about">About me</Link>
+            <Link href="/resume">Resume</Link>
+          </nav>
           <div className={styles.toolbar}>
             <div className={styles.sortButtons}>
               <button
