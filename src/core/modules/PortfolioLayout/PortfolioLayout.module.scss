@@ -1,0 +1,112 @@
+@use '@/core/theme' as theme;
+
+.header,
+.navigation {
+  display: none;
+}
+
+@media (max-width: 699px) {
+  .header {
+    display: block;
+    padding: 24px 20px 0;
+  }
+
+  .identity {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .name {
+    margin: 0;
+    max-width: 240px;
+    color: theme.$color-accent;
+    font: theme.$font-weight-heading 30px / 1.08 theme.$font-heading;
+    letter-spacing: -0.02em;
+  }
+
+  .contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    padding: 3px 12px;
+    border: 1px solid theme.$color-border;
+    border-radius: 2px;
+    font-size: 13px;
+    text-decoration: none;
+  }
+
+  .intro {
+    margin: 20px 0 0;
+    font-size: 12px;
+    line-height: 1.7;
+
+    span {
+      color: theme.$color-muted;
+    }
+  }
+
+  .navigation {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+    margin: 0 20px 20px;
+    border-bottom: 1px solid theme.$color-border;
+    font: 400 13px / 20px theme.$font-body;
+    letter-spacing: 0.04em;
+    scroll-margin-top: 12px;
+
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 8px 4px;
+      border-bottom: 3px solid transparent;
+      border-radius: 2px 2px 0 0;
+      text-decoration: none;
+      text-transform: uppercase;
+
+      &:hover {
+        background: var(--surface-hover);
+      }
+
+      &[aria-current='page'] {
+        color: var(--color-link-accent);
+        border-bottom-color: currentColor;
+        background: var(--surface-hover);
+      }
+    }
+  }
+
+  :global(html[data-mode='punk']) {
+    .name {
+      font-size: 23px;
+      text-transform: uppercase;
+      letter-spacing: -0.04em;
+    }
+
+    .intro,
+    .navigation,
+    .contact {
+      font-family: monospace;
+    }
+
+    .contact {
+      border-color: var(--neon-pink);
+      color: var(--neon-pink);
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+  }
+}
+
+@media print {
+  .header,
+  .navigation {
+    display: none;
+  }
+}

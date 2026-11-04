@@ -408,3 +408,30 @@
     break-inside: avoid;
   }
 }
+
+@media (max-width: 699px) {
+  .page[data-portfolio-page] {
+    .navigation,
+    .subtitle {
+      display: none;
+    }
+
+    .header {
+      padding: 0 20px;
+
+      h1 {
+        margin-top: 0;
+        font-size: 32px;
+        line-height: 1.2;
+      }
+    }
+
+    .content {
+      margin-top: 24px;
+    }
+
+    .aboutIntro {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}
