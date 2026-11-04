@@ -21,12 +21,21 @@ test('selecting each filter shows only its projects and selecting it again resto
   }
 });
 
-test('switching filters replaces the selection, while shuffle and reset show all projects', () => {
+test('switching filters replaces the selection and reset shows all projects', () => {
   assert.equal(nextArrangement('loved', 'painful'), 'painful');
   assert.equal(nextArrangement('painful', 'loved'), 'loved');
-  for (const action of ['original', 'shuffle'] as const) {
+  for (const action of ['original'] as const) {
     const next = nextArrangement('loved', action);
     assert.equal(next, action);
     assert.ok(slugs.every((slug) => isProjectVisible(slug, next)));
   }
+});
+
+test('shuffle preserves a pinned filter and clicking that filter again still clears it', () => {
+  for (const filter of ['loved', 'painful'] as const) {
+    const shuffled = nextArrangement(filter, 'shuffle');
+    assert.equal(shuffled, filter);
+    assert.equal(nextArrangement(shuffled, filter), 'original');
+  }
+  assert.equal(nextArrangement('original', 'shuffle'), 'shuffle');
 });

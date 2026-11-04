@@ -32,3 +32,13 @@ test('leaving a preview preserves shuffle and reset clears a preview', () => {
     preview: null,
   });
 });
+
+test('shuffle clears a temporary preview but keeps the pinned filter', () => {
+  for (const filter of ['loved', 'painful'] as const) {
+    const state = { arrangement: filter, preview: 'painful' } as const;
+    assert.deepEqual(filters.filterReducer(state, { type: 'select', arrangement: 'shuffle' }), {
+      arrangement: filter,
+      preview: null,
+    });
+  }
+});

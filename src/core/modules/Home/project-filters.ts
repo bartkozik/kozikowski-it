@@ -8,6 +8,7 @@ export const projectFilters: Record<'loved' | 'painful', readonly ProjectSlug[]>
 } satisfies Record<string, readonly ProjectSlug[]>;
 
 export function nextArrangement(current: Arrangement, requested: Arrangement): Arrangement {
+  if (requested === 'shuffle' && (current === 'loved' || current === 'painful')) return current;
   return (requested === 'loved' || requested === 'painful') && current === requested ? 'original' : requested;
 }
 
