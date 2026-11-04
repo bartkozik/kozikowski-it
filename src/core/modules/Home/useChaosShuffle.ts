@@ -43,7 +43,7 @@ export function useChaosShuffle(enabled: boolean, canvas: RefObject<HTMLDivEleme
       return;
     }
     const cards = Array.from(canvas.current.children).filter(
-      (element): element is HTMLElement => element instanceof HTMLElement,
+      (element): element is HTMLElement => element instanceof HTMLElement && !element.hidden,
     );
     const before = cards.map((card) => ({
       x: card.offsetLeft,

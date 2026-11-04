@@ -257,9 +257,23 @@ export function useProjectBoard() {
     dispatchFilter({ type: 'select', arrangement: requested });
     setHoveredProject(null);
     setFocusedProject(null);
-    if (mode === 'shuffle') {
-      if (measurement) setPositions(shuffledPositions(measurement.dimensions, Math.random, measurement.height));
-      setOrder(cardPresets.map((_, index) => index));
+    if (requested === 'shuffle') {
+      const visibleIndices = cardPresets.flatMap((card, index) => (isProjectVisible(card.slug, mode) ? [index] : []));
+      if (measurement) {
+        const shuffled = shuffledPositions(
+          visibleIndices.map((index) => measurement.dimensions[index]),
+          Math.random,
+          measurement.height,
+        );
+        setPositions((current) => {
+          const next = [...current];
+          visibleIndices.forEach((index, rank) => {
+            next[index] = shuffled[rank];
+          });
+          return next;
+        });
+      }
+      setOrder((current) => [...current.filter((index) => !visibleIndices.includes(index)), ...visibleIndices]);
     } else {
       const featured = mode === 'loved' || mode === 'painful' ? projectFilters[mode] : [];
       const arranged = positionsForFilter(mode);
@@ -275,10 +289,14 @@ export function useProjectBoard() {
       ]);
     }
     setAnnouncement(
-      mode === 'original'
-        ? 'All projects shown. Original layout restored.'
-        : mode === 'shuffle'
-          ? 'All projects shown and shuffled.'
+      requested === 'shuffle'
+        ? mode === 'loved'
+          ? 'Most loved projects shuffled. Filter remains active.'
+          : mode === 'painful'
+            ? 'Most painful projects shuffled. Filter remains active.'
+            : 'All projects shuffled.'
+        : mode === 'original'
+          ? 'All projects shown. Original layout restored.'
           : mode === 'loved'
             ? 'Showing 3 projects: EPOCA, Board.Dev and PM Traffic Manager.'
             : 'Showing 2 projects: Ad Template Platform and Art Network.',
