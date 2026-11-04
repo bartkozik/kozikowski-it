@@ -15,7 +15,7 @@ export const projectDetails: readonly ProjectDetails[] = [
     slug: 'pm-traffic-manager',
     overview:
       'A collaborative planning application that brings people, project capacity and revenue into one workspace. Monthly allocations connect to weekly detail, staffing costs, expected revenue and planning risks.',
-    role: 'Sole full stack developer, working as a contractor with Iterators over a six-month development period. I designed and implemented the interface, shared domain logic, API and database persistence.',
+    role: 'Sole full stack developer, working as a contractor with Iterators over a six-month development period. I designed and implemented the interface, shared domain logic, API and database persistence, using AI-assisted development.',
     stack: ['React', 'TypeScript', 'Fastify', 'PostgreSQL', 'Zustand', 'Mantine', 'Zod', 'Yjs', 'WebSockets'],
     highlights: [
       'Built drag-and-drop allocation planning with monthly perspectives and weekly capacity views.',
@@ -26,7 +26,7 @@ export const projectDetails: readonly ProjectDetails[] = [
     challenge:
       'Keep planning calculations consistent across interactive views and concurrent edits while retaining the API and PostgreSQL as the durable source of business data.',
     status:
-      'Working MVP. The application has not been released to production; a sanitized source snapshot is available.',
+      'Working MVP with a guest demo using fictional data. Choose “Uruchom demo” to start without an account, drag capacity tiles between projects, and compare costs and revenue. “Reset demo” restores your private board; sessions last up to 24 hours. Optional AI analyses are limited and do not affect the planning tools. Do not enter personal or confidential information.',
   },
   {
     slug: 'epoca',
