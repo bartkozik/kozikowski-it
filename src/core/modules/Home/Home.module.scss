@@ -122,9 +122,6 @@
 .board {
   min-width: 0;
 }
-.mobileNavigation {
-  display: none;
-}
 .toolbar {
   display: flex;
   justify-content: space-between;
@@ -198,6 +195,7 @@
   color: theme.$color-muted;
 }
 .preview {
+  position: relative;
   display: block;
   text-decoration: none;
   overflow: hidden;
@@ -332,60 +330,31 @@
 
 @media (max-width: 699px) {
   .home {
-    padding: 24px 20px 90px;
+    padding: 0 20px 90px;
   }
-  .header {
-    align-items: start;
-    flex-wrap: wrap;
-    gap: 16px;
-    h1 {
-      max-width: 240px;
-      font-size: 30px;
-      line-height: 1.08;
+
+  .home > .header {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+
+    .contact {
+      display: none;
     }
   }
-  .contact {
-    gap: 12px;
-    font-size: 13px;
-    white-space: nowrap;
-  }
-  .sidebar nav {
+
+  .sidebar {
     display: none;
   }
-  .mobileNavigation {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 4px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid theme.$color-border;
-    font: 400 13px / 20px theme.$font-body;
-    letter-spacing: 0.04em;
 
-    a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 48px;
-      padding: 8px 4px;
-      border-bottom: 3px solid transparent;
-      border-radius: 2px 2px 0 0;
-      text-decoration: none;
-      text-transform: uppercase;
-
-      &:hover {
-        background: var(--surface-hover);
-      }
-
-      &[aria-current='page'] {
-        color: var(--color-link-accent);
-        border-bottom-color: currentColor;
-        background: var(--surface-hover);
-      }
-    }
+  .mobileLab {
+    margin-top: 40px;
   }
-  .intro {
-    font-size: 12px;
-  }
+
   .canvas {
     grid-template-columns: minmax(0, 1fr);
     gap: 28px;
@@ -500,9 +469,6 @@
     font-size: 12px;
   }
   .sidebar {
-    font-family: monospace;
-  }
-  .mobileNavigation {
     font-family: monospace;
   }
   .sidebar h2 {

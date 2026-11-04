@@ -6,6 +6,8 @@ import Link from 'next/link';
 
 import { useExperience } from '@/core/modules/Experience/ExperienceProvider';
 import { PunkLab } from '@/core/modules/Experience/PunkLab';
+import { useMobileViewport } from '@/core/modules/PortfolioLayout/useMobileViewport';
+import { PortfolioIntro } from '@/core/modules/PortfolioLayout/PortfolioIntro';
 import { SiteSignature } from '@/core/modules/SiteSignature/SiteSignature';
 import { projects } from '@/core/content/projects';
 
@@ -18,6 +20,7 @@ import styles from './Home.module.scss';
 export function Home() {
   const { mode } = useExperience();
   const punk = mode === 'punk';
+  const mobile = useMobileViewport();
   const board = useProjectBoard();
   const {
     arrangement,
@@ -33,7 +36,7 @@ export function Home() {
   } = board;
   const chaos = useChaosShuffle(punk, canvas, () => arrange('shuffle'));
   return (
-    <main className={styles.home} id="main-content">
+    <main className={styles.home} id="main-content" tabIndex={-1}>
       <header className={styles.header}>
         <h1>Bartosz Kozikowski</h1>
         <Link className={styles.contact} href="/contact">
@@ -43,7 +46,7 @@ export function Home() {
           </span>
         </Link>
       </header>
-      {punk && <PunkLab />}
+      {punk && !mobile && <PunkLab />}
       <div className={styles.workspace}>
         <aside className={styles.sidebar}>
           <nav aria-label="Portfolio">
@@ -86,22 +89,10 @@ export function Home() {
               </Link>
             </div>
           </nav>
-          <p className={styles.intro}>
-            Full stack developer. <br />
-            React, TypeScript &amp; a little curiosity.
-            <br />
-            <span>Based in Warsaw. Working everywhere.</span>
-          </p>
+          <PortfolioIntro className={styles.intro} />
           <SiteSignature />
         </aside>
         <section className={styles.board} aria-label="Project cards" id="projects">
-          <nav className={styles.mobileNavigation} aria-label="Portfolio sections">
-            <Link href="#projects" aria-current="page">
-              Projects
-            </Link>
-            <Link href="/about">About me</Link>
-            <Link href="/resume">Resume</Link>
-          </nav>
           <div className={styles.toolbar}>
             <div className={styles.sortButtons}>
               <button
@@ -174,6 +165,11 @@ export function Home() {
           </p>
         </section>
       </div>
+      {punk && mobile && (
+        <div className={styles.mobileLab}>
+          <PunkLab />
+        </div>
+      )}
     </main>
   );
 }

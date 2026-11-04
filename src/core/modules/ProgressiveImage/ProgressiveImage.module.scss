@@ -1,0 +1,53 @@
+.frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+
+.frame[data-fill] {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+}
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  filter: blur(8px);
+  transition: opacity 220ms ease-out;
+  pointer-events: none;
+}
+
+.image {
+  opacity: 0;
+  transition: opacity 220ms ease-out;
+}
+
+.frame[data-ready] {
+  .image {
+    opacity: 1;
+  }
+
+  .placeholder {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image,
+  .placeholder {
+    transition: none;
+  }
+}
+
+@media print, (scripting: none) {
+  .image {
+    opacity: 1;
+  }
+
+  .placeholder {
+    display: none;
+  }
+}
