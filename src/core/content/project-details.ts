@@ -26,7 +26,7 @@ export const projectDetails: readonly ProjectDetails[] = [
     challenge:
       'Keep planning calculations consistent across interactive views and concurrent edits while retaining the API and PostgreSQL as the durable source of business data.',
     status:
-      'Working MVP with a guest demo using fictional data. Choose “Uruchom demo” to start without an account, drag capacity tiles between projects, and compare costs and revenue. “Reset demo” restores your private board; sessions last up to 24 hours. Optional AI analyses are limited and do not affect the planning tools. Do not enter personal or confidential information.',
+      'Working MVP with a guest demo using fictional data. Choose “Open demo” to start without an account, drag capacity tiles between projects, and compare costs and revenue. “Reset demo” restores your private board; sessions last up to 24 hours. Optional AI analyses are limited and do not affect the planning tools. Do not enter personal or confidential information.',
   },
   {
     slug: 'epoca',
