@@ -149,7 +149,7 @@
   .radio {
     right: 8px;
     width: min(340px, calc(100% - 16px));
-    bottom: 72px;
+    bottom: calc(56px + env(safe-area-inset-bottom, 0px));
   }
   .panel {
     padding: 8px;

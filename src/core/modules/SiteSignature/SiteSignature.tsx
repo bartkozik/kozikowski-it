@@ -10,3 +10,11 @@ export function SiteSignature() {
     </div>
   );
 }
+
+export function MobileSiteFooter() {
+  return (
+    <footer className={styles.mobileFooter} aria-label="Site information">
+      <SiteSignature />
+    </footer>
+  );
+}

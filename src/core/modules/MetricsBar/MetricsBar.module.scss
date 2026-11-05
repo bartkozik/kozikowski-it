@@ -167,21 +167,46 @@
   color: theme.$color-accent;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 699px) {
+  .footer {
+    height: calc(44px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    font-size: 14px;
+    line-height: 20px;
+  }
   .detailsLink {
-    padding-inline: 12px;
-    gap: 6px;
-    font-size: 16px;
+    padding-inline: 10px;
+    gap: 4px;
+    font-size: 12px;
+    text-underline-offset: 3px;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
   }
   .metrics {
-    gap: 24px;
-    padding-right: 24px;
+    gap: 14px;
+    padding-right: 14px;
   }
   .item {
-    gap: 24px;
+    gap: 14px;
+  }
+  .separator {
+    width: 12px;
+    height: 16px;
+    flex-basis: 12px;
+  }
+  .metric {
+    padding-inline: 4px;
   }
   .playback {
-    margin-inline: 2px;
+    margin-inline: 0;
+    font-size: 16px;
+  }
+  .tooltip {
+    bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+    max-height: calc(100dvh - 80px - env(safe-area-inset-bottom, 0px));
   }
 }
 

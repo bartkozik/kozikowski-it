@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 
 import { profile } from '@/core/content/profile';
 import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
-import { SiteSignature } from '@/core/modules/SiteSignature/SiteSignature';
 
 import { PortfolioIntro } from './PortfolioIntro';
 import styles from './PortfolioLayout.module.scss';
@@ -19,7 +18,6 @@ export function PortfolioLayout({ children }: Readonly<{ children: ReactNode }>)
           </Link>
         </div>
         <PortfolioIntro className={styles.intro} />
-        <SiteSignature />
       </header>
       {children}
     </>
