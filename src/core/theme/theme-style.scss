@@ -80,6 +80,14 @@ body {
   letter-spacing: theme.$letter-spacing-body;
 }
 
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  letter-spacing: inherit;
+}
+
 a {
   color: inherit;
 }
