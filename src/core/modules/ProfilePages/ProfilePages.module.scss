@@ -410,8 +410,11 @@
 }
 
 @media (max-width: 699px) {
+  .navigation {
+    display: none;
+  }
+
   .page[data-portfolio-page] {
-    .navigation,
     .subtitle {
       display: none;
     }

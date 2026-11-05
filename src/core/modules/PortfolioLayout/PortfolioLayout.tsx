@@ -6,7 +6,6 @@ import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
 import { SiteSignature } from '@/core/modules/SiteSignature/SiteSignature';
 
 import { PortfolioIntro } from './PortfolioIntro';
-import { PortfolioNavigation } from './PortfolioNavigation';
 import styles from './PortfolioLayout.module.scss';
 
 export function PortfolioLayout({ children }: Readonly<{ children: ReactNode }>) {
@@ -22,7 +21,6 @@ export function PortfolioLayout({ children }: Readonly<{ children: ReactNode }>)
         <PortfolioIntro className={styles.intro} />
         <SiteSignature />
       </header>
-      <PortfolioNavigation />
       {children}
     </>
   );

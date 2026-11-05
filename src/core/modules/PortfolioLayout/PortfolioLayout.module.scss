@@ -1,7 +1,6 @@
 @use '@/core/theme' as theme;
 
-.header,
-.navigation {
+.header {
   display: none;
 }
 
@@ -49,39 +48,6 @@
     }
   }
 
-  .navigation {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 4px;
-    margin: 0 20px 20px;
-    border-bottom: 1px solid theme.$color-border;
-    font: 400 13px / 20px theme.$font-body;
-    letter-spacing: 0.04em;
-    scroll-margin-top: 12px;
-
-    a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 48px;
-      padding: 8px 4px;
-      border-bottom: 3px solid transparent;
-      border-radius: 2px 2px 0 0;
-      text-decoration: none;
-      text-transform: uppercase;
-
-      &:hover {
-        background: var(--surface-hover);
-      }
-
-      &[aria-current='page'] {
-        color: var(--color-link-accent);
-        border-bottom-color: currentColor;
-        background: var(--surface-hover);
-      }
-    }
-  }
-
   :global(html[data-mode='punk']) {
     .name {
       font-size: 23px;
@@ -90,7 +56,6 @@
     }
 
     .intro,
-    .navigation,
     .contact {
       font-family: monospace;
     }
@@ -105,8 +70,7 @@
 }
 
 @media print {
-  .header,
-  .navigation {
+  .header {
     display: none;
   }
 }
