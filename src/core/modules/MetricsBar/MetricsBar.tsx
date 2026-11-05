@@ -5,6 +5,8 @@ import { ArrowIcon } from '@/core/modules/Icons/ArrowIcon';
 import Link from 'next/link';
 import { useEffect, useId, useRef, useState } from 'react';
 
+import { useExperience } from '@/core/modules/Experience/ExperienceProvider';
+import { getMetricsCopy, getMetricDescription } from '@/core/content/metrics-copy';
 import { siteMetricDefinitions, type SiteMetricDefinition } from '@/core/content/site-metrics';
 
 import { formatMetricValue } from './metric-format';
@@ -14,6 +16,9 @@ import styles from './MetricsBar.module.scss';
 
 export function MetricsBar() {
   const measurement = useVisitorMetrics();
+  const { mode } = useExperience();
+  const punk = mode === 'punk';
+  const copy = getMetricsCopy(punk);
   const footer = useRef<HTMLElement>(null);
   const viewport = useRef<HTMLDivElement>(null);
   const cycle = useRef<HTMLUListElement>(null);
@@ -127,7 +132,7 @@ export function MetricsBar() {
       }}
     >
       <Link href="/metrics" className={styles.detailsLink}>
-        Site metrics{' '}
+        {copy.shortTitle}{' '}
         <span aria-hidden="true">
           <ArrowIcon />
         </span>
@@ -187,24 +192,24 @@ export function MetricsBar() {
       </button>
       {active && (
         <div className={styles.tooltip} role="tooltip" id={tooltipId} style={{ left: active.left }}>
-          <span className={styles.eyebrow}>Live · your browser</span>
+          <span className={styles.eyebrow}>{copy.live}</span>
           <h2>{active.metric.label}</h2>
           <strong className={styles.value}>{formatMetricValue(value, active.metric.unit)}</strong>
-          <p>{active.metric.description}</p>
+          <p>{getMetricDescription(active.metric, punk)}</p>
           <dl>
             <div>
-              <dt>Measured</dt>
+              <dt>{copy.measured}</dt>
               <dd>
                 {recordedAt ? (
                   <time dateTime={new Date(recordedAt).toISOString()}>{new Date(recordedAt).toLocaleString()}</time>
                 ) : (
-                  'Not recorded'
+                  copy.unrecorded
                 )}
               </dd>
             </div>
             {value !== null && (
               <div>
-                <dt>Raw value</dt>
+                <dt>{copy.raw}</dt>
                 <dd>
                   {value.toLocaleString('en-US', { maximumFractionDigits: 3 })}{' '}
                   {active.metric.unit === 'ratio' ? '(unitless)' : active.metric.unit}
@@ -212,15 +217,15 @@ export function MetricsBar() {
               </div>
             )}
             <div>
-              <dt>Page opened</dt>
-              <dd>{measurement.page ?? 'Waiting for browser measurements'}</dd>
+              <dt>{copy.page}</dt>
+              <dd>{measurement.page ?? copy.waiting}</dd>
             </div>
             <div>
-              <dt>Scope</dt>
-              <dd>This document visit, including in-app navigation. Refresh to start a new measurement.</dd>
+              <dt>{copy.scopeLabel}</dt>
+              <dd>{copy.tooltipScope}</dd>
             </div>
           </dl>
-          {value === null && <p>Waiting for a measurement. Some metrics require interaction or browser support.</p>}
+          {value === null && <p>{copy.missing}</p>}
         </div>
       )}
     </footer>
