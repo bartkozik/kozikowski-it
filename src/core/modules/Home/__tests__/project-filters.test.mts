@@ -5,7 +5,7 @@ import { isProjectVisible, nextArrangement } from '../project-filters.ts';
 
 const slugs = ['epoca', 'board-dev', 'pm-traffic-manager', 'ad-template-platform', 'art-network', 'celina'];
 
-test('selecting each filter shows only its projects and selecting it again restores all cards', () => {
+test('selecting each filter shows only its projects and selecting it again keeps the selection', () => {
   for (const [filter, expected] of [
     ['loved', ['epoca', 'board-dev', 'pm-traffic-manager']],
     ['painful', ['ad-template-platform', 'art-network']],
@@ -15,9 +15,7 @@ test('selecting each filter shows only its projects and selecting it again resto
       slugs.filter((slug) => isProjectVisible(slug, active)),
       expected,
     );
-    const cleared = nextArrangement(active, filter);
-    assert.equal(cleared, 'original');
-    assert.ok(slugs.every((slug) => isProjectVisible(slug, cleared)));
+    assert.equal(nextArrangement(active, filter), filter);
   }
 });
 
@@ -31,11 +29,11 @@ test('switching filters replaces the selection and reset shows all projects', ()
   }
 });
 
-test('shuffle preserves a pinned filter and clicking that filter again still clears it', () => {
+test('shuffle preserves a pinned filter and clicking that filter again keeps it', () => {
   for (const filter of ['loved', 'painful'] as const) {
     const shuffled = nextArrangement(filter, 'shuffle');
     assert.equal(shuffled, filter);
-    assert.equal(nextArrangement(shuffled, filter), 'original');
+    assert.equal(nextArrangement(shuffled, filter), filter);
   }
   assert.equal(nextArrangement('original', 'shuffle'), 'shuffle');
 });

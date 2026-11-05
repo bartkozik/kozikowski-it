@@ -97,6 +97,17 @@ export function Home() {
             <div className={styles.sortButtons}>
               <button
                 type="button"
+                aria-pressed={arrangement === 'original' || arrangement === 'shuffle'}
+                disabled={chaos.scrambling}
+                onPointerEnter={(event) => previewFilter(event, 'original')}
+                onPointerLeave={clearFilterPreview}
+                onPointerCancel={clearFilterPreview}
+                onClick={() => arrange('original')}
+              >
+                All
+              </button>
+              <button
+                type="button"
                 aria-pressed={arrangement === 'loved'}
                 title="EPOCA, Board.Dev and PM Traffic Manager"
                 disabled={chaos.scrambling}

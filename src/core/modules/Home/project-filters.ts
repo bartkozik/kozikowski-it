@@ -9,7 +9,7 @@ export const projectFilters: Record<'loved' | 'painful', readonly ProjectSlug[]>
 
 export function nextArrangement(current: Arrangement, requested: Arrangement): Arrangement {
   if (requested === 'shuffle' && (current === 'loved' || current === 'painful')) return current;
-  return (requested === 'loved' || requested === 'painful') && current === requested ? 'original' : requested;
+  return requested;
 }
 
 export function isProjectVisible(slug: string, arrangement: Arrangement): boolean {
@@ -20,7 +20,7 @@ export function isProjectVisible(slug: string, arrangement: Arrangement): boolea
   );
 }
 
-export type ProjectFilter = 'loved' | 'painful';
+export type ProjectFilter = 'original' | 'loved' | 'painful';
 
 interface FilterState {
   readonly arrangement: Arrangement;
