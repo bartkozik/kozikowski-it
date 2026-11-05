@@ -32,6 +32,7 @@ export const projects = [
     slug: 'epoca',
     name: 'EPOCA',
     tagline: 'Time tracking and reporting application',
+    demoUrl: 'https://epoca.kozikowski.it',
     resources: [
       {
         kind: 'source',
