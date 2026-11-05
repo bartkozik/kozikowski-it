@@ -69,18 +69,39 @@
 }
 @media (max-width: 699px) {
   .bar {
-    padding: 12px 20px 0;
+    display: none;
   }
   .label {
     display: none;
   }
   .switch button {
-    min-height: 40px;
+    min-height: 44px;
   }
   :global(html[data-mode='punk']) .bar {
     justify-content: flex-end;
   }
+
+  .bar.embedded {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 20px 0 0;
+    border-top: 1px solid theme.$color-border;
+
+    .label {
+      display: block;
+    }
+    .switch {
+      width: 100%;
+    }
+    .switch button {
+      flex: 1;
+      min-width: 0;
+    }
+  }
 }
+
 @media print {
   .bar {
     display: none;

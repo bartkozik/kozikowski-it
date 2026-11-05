@@ -13,7 +13,7 @@ export function MetricsReport() {
   const measurement = useVisitorMetrics();
 
   return (
-    <main className={styles.page} id="main-content">
+    <main className={styles.page} id="main-content" tabIndex={-1}>
       <header className={styles.header}>
         <Link href="/" className={styles.backLink}>
           <span aria-hidden="true">

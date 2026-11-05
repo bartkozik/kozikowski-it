@@ -11,10 +11,10 @@ const modes = {
   punk: { icon: '↯', label: 'Punk', title: 'Punk mode — enter the implant lab' },
 };
 
-export function ModeSwitch() {
+export function ModeSwitch({ embedded = false }: Readonly<{ embedded?: boolean }>) {
   const { mode } = useExperience();
   return (
-    <div className={styles.bar}>
+    <div className={`${styles.bar} ${embedded ? styles.embedded : ''}`}>
       <span className={styles.label}>{mode === 'punk' ? 'UNAUTHORIZED INTERFACE // v.2077' : 'Choose your shift'}</span>
       <div className={styles.switch} role="group" aria-label="Interface mode">
         {interfaceModes.map((value) => (

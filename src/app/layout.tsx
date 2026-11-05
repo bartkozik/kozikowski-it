@@ -6,6 +6,7 @@ import { ModeSwitch } from '@/core/modules/Experience/ModeSwitch';
 import { PunkRadio } from '@/core/modules/Experience/PunkRadio';
 import { modeBootstrap } from '@/core/modules/Experience/interface-mode';
 
+import { PortfolioNavigation } from '@/core/modules/PortfolioLayout/PortfolioNavigation';
 import { MetricsBar } from '@/core/modules/MetricsBar';
 import { fontVariables } from '@/core/theme/fonts';
 
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           Skip to content
         </a>
         <ExperienceProvider>
+          <PortfolioNavigation />
           <ModeSwitch />
           {children}
           <PunkRadio />

@@ -34,7 +34,7 @@ export function ProjectDetails({ project, details, nextProject }: ProjectDetails
 
   return (
     <ViewTransition name={`project-${project.slug}`} share="project-expand" default="none">
-      <main className={styles.page} id="main-content">
+      <main className={styles.page} id="main-content" tabIndex={-1}>
         <header className={styles.header}>
           <nav className={styles.projectNavigation} aria-label="Project navigation">
             <Link href="/" className={styles.backLink}>
