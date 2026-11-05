@@ -7,6 +7,7 @@ import { PunkRadio } from '@/core/modules/Experience/PunkRadio';
 import { modeBootstrap } from '@/core/modules/Experience/interface-mode';
 
 import { PortfolioNavigation } from '@/core/modules/PortfolioLayout/PortfolioNavigation';
+import { MobileSiteFooter } from '@/core/modules/SiteSignature/SiteSignature';
 import { MetricsBar } from '@/core/modules/MetricsBar';
 import { fontVariables } from '@/core/theme/fonts';
 
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           <PortfolioNavigation />
           <ModeSwitch />
           {children}
+          <MobileSiteFooter />
           <PunkRadio />
           <MetricsBar />
         </ExperienceProvider>
