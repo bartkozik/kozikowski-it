@@ -361,12 +361,6 @@
   }
   .card {
     padding: 14px;
-    &:nth-child(3n + 1) {
-      transform: rotate(-1deg);
-    }
-    &:nth-child(3n + 2) {
-      transform: rotate(1deg);
-    }
   }
   .tagline {
     font-size: 13px;
@@ -537,6 +531,14 @@
     }
   }
   @media (max-width: 699px) {
+    .card {
+      &:nth-child(3n + 1) {
+        transform: rotate(-1deg);
+      }
+      &:nth-child(3n + 2) {
+        transform: rotate(1deg);
+      }
+    }
     .header h1 {
       font-size: 23px;
     }
