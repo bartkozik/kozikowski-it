@@ -9,6 +9,7 @@ import { getProjectVisual } from '@/core/content/project-visuals';
 import { useExperience } from '@/core/modules/Experience/ExperienceProvider';
 import { ImplantUpgrade } from '@/core/modules/Experience/ImplantUpgrade';
 
+import { LiveDemoLink } from './LiveDemoLink';
 import { cardPresets } from './card-presets';
 import { isProjectVisible } from './project-filters';
 import type { useProjectBoard } from './useProjectBoard';
@@ -101,34 +102,37 @@ export function ProjectCard({ project, index, board }: ProjectCardProps) {
           <ArrowIcon />
         </div>
         <p className={styles.tagline}>{(punk && getPunkProjectCopy(project.slug)?.tagline) || project.tagline}</p>
-        <ViewTransition name={`project-image-${project.slug}`} share="project-image" default="none">
-          <Link className={styles.preview} href={`/projects/${project.slug}`} tabIndex={-1}>
-            {visual ? (
-              <ProgressiveImage
-                src={visual}
-                alt={visual.alt}
-                fill
-                position="top"
-                sizes="(max-width: 699px) 90vw, (max-width: 1099px) 45vw, 30vw"
-                draggable={false}
-                loading={['liquid-editions', 'fanimani', 'board-dev'].includes(project.slug) ? 'eager' : 'lazy'}
-              />
-            ) : (
-              <div className={styles.typePreview}>
-                <span className={styles.projectNumber}>
-                  {String(projects.findIndex((item) => item.slug === project.slug) + 1).padStart(2, '0')}
-                </span>
-                <strong>{project.name}</strong>
-                <span className={styles.previewLabel}>
-                  {project.resources.some((resource) => resource.kind === 'source')
-                    ? 'Explore the application & source'
-                    : 'Explore the case study'}{' '}
-                  <ArrowIcon size={16} />
-                </span>
-              </div>
-            )}
-          </Link>
-        </ViewTransition>
+        <div className={styles.projectPreview}>
+          <ViewTransition name={`project-image-${project.slug}`} share="project-image" default="none">
+            <Link className={styles.preview} href={`/projects/${project.slug}`} tabIndex={-1}>
+              {visual ? (
+                <ProgressiveImage
+                  src={visual}
+                  alt={visual.alt}
+                  fill
+                  position="top"
+                  sizes="(max-width: 699px) 90vw, (max-width: 1099px) 45vw, 30vw"
+                  draggable={false}
+                  loading={['liquid-editions', 'fanimani', 'board-dev'].includes(project.slug) ? 'eager' : 'lazy'}
+                />
+              ) : (
+                <div className={styles.typePreview}>
+                  <span className={styles.projectNumber}>
+                    {String(projects.findIndex((item) => item.slug === project.slug) + 1).padStart(2, '0')}
+                  </span>
+                  <strong>{project.name}</strong>
+                  <span className={styles.previewLabel}>
+                    {project.resources.some((resource) => resource.kind === 'source')
+                      ? 'Explore the application & source'
+                      : 'Explore the case study'}{' '}
+                    <ArrowIcon size={16} />
+                  </span>
+                </div>
+              )}
+            </Link>
+          </ViewTransition>
+          {project.demoUrl && <LiveDemoLink href={project.demoUrl} projectName={project.name} />}
+        </div>
         {punk && <ImplantUpgrade slug={project.slug} />}
       </article>
     </ViewTransition>

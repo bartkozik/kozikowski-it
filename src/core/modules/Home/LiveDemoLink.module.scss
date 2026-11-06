@@ -1,0 +1,45 @@
+@use '@/core/theme' as theme;
+
+.badge {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 7px 10px;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  background: var(--color-card);
+  color: var(--color-link-accent);
+  box-shadow: 2px 2px 0 rgb(0 0 0 / 12%);
+  font: 500 11px / 1.4 theme.$font-body;
+  text-decoration: none;
+  white-space: nowrap;
+
+  svg {
+    flex: none;
+  }
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+:global(html[data-mode='punk']) .badge {
+  border-radius: 0;
+  border-color: var(--neon-cyan);
+  box-shadow: 3px 3px 0 var(--neon-pink);
+  font-family: monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 699px), (pointer: coarse) {
+  .badge {
+    min-height: 44px;
+  }
+}
