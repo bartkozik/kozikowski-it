@@ -8,6 +8,7 @@ import { getMetricsCopy, getMetricDescription } from '@/core/content/metrics-cop
 import { siteMetricDefinitions } from '@/core/content/site-metrics';
 
 import { formatMetricValue } from './metric-format';
+import { MeasurementTime } from './MeasurementTime';
 import { useVisitorMetrics } from './use-visitor-metrics';
 import styles from './MetricsReport.module.scss';
 
@@ -41,13 +42,7 @@ export function MetricsReport() {
             <div>
               <dt>{copy.started}</dt>
               <dd>
-                {measurement.startedAt !== null ? (
-                  <time dateTime={new Date(measurement.startedAt).toISOString()}>
-                    {new Date(measurement.startedAt).toLocaleString()}
-                  </time>
-                ) : (
-                  copy.unmeasured
-                )}
+                <MeasurementTime timestamp={measurement.startedAt} fallback={copy.unmeasured} />
               </dd>
             </div>
             <div>
@@ -82,10 +77,7 @@ export function MetricsReport() {
                     <p>{getMetricDescription(metric, punk)}</p>
                     {reading.recordedAt !== null && (
                       <p>
-                        {copy.updated}{' '}
-                        <time dateTime={new Date(reading.recordedAt).toISOString()}>
-                          {new Date(reading.recordedAt).toLocaleString()}
-                        </time>
+                        {copy.updated} <MeasurementTime timestamp={reading.recordedAt} fallback={copy.unrecorded} />
                       </p>
                     )}
                   </dd>

@@ -9,15 +9,22 @@ import styles from './PunkRadio.module.scss';
 const playlistId = '37i9dQZF1DWYMokBiQj5qF';
 const playlistUrl = `https://open.spotify.com/playlist/${playlistId}`;
 
+type RadioView = 'closed' | 'expanded' | 'minimized';
+
+const triggerLabels: Record<RadioView, string> = {
+  closed: 'Pirate radio',
+  expanded: 'Minimize radio',
+  minimized: 'Expand radio',
+};
+
 export function PunkRadio() {
   const { mode } = useExperience();
   return mode === 'punk' ? <RadioReceiver /> : null;
 }
 
 function RadioReceiver() {
-  const [view, setView] = useState<'closed' | 'expanded' | 'minimized'>('closed');
+  const [view, setView] = useState<RadioView>('closed');
   const enabled = view !== 'closed';
-  const minimized = view === 'minimized';
   const [showTracks, setShowTracks] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
   const panelControl = useRef<HTMLButtonElement>(null);
@@ -30,6 +37,11 @@ function RadioReceiver() {
     setView('closed');
     setShowTracks(false);
     trigger.current?.focus();
+  }
+
+  function toggleView() {
+    if (view === 'expanded') minimize();
+    else setView('expanded');
   }
 
   function minimize() {
@@ -107,10 +119,10 @@ function RadioReceiver() {
           ref={trigger}
           className={styles.trigger}
           type="button"
-          aria-label={view === 'closed' ? 'Pirate radio' : minimized ? 'Expand radio' : 'Minimize radio'}
+          aria-label={triggerLabels[view]}
           aria-expanded={view === 'expanded'}
           aria-controls="punk-radio-player"
-          onClick={() => (view === 'expanded' ? minimize() : setView('expanded'))}
+          onClick={toggleView}
         >
           <span className={styles.icon} aria-hidden="true">
             ↯

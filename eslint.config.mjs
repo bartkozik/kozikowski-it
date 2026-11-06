@@ -7,5 +7,20 @@ export default defineConfig([
   ...nextVitals,
   ...nextTypescript,
   prettier,
+  {
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'ConditionalExpression ConditionalExpression',
+          message: 'Avoid nested ternaries. Use named values or explicit branches.',
+        },
+        {
+          selector: 'JSXExpressionContainer > ConditionalExpression:has(JSXElement, JSXFragment)',
+          message: 'Move conditional markup into a named value or a focused component.',
+        },
+      ],
+    },
+  },
   globalIgnores(['.next/**', 'out/**', 'coverage/**', 'next-env.d.ts']),
 ]);

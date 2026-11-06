@@ -35,6 +35,9 @@ export function Home() {
     arrange,
   } = board;
   const chaos = useChaosShuffle(punk, canvas, () => arrange('shuffle'));
+  const punkShuffleLabel = chaos.scrambling ? 'SCRAMBLING…' : 'CHAOS PROTOCOL';
+  const shuffleLabel = punk ? punkShuffleLabel : 'Shuffle';
+  const chaosStatus = chaos.scrambling ? '// INJECTING ENTROPY…' : chaos.message || '// CHAOS ENGINE ARMED.';
   return (
     <main className={styles.home} id="main-content" tabIndex={-1}>
       <header className={styles.header}>
@@ -131,7 +134,7 @@ export function Home() {
                 Most painful
               </button>
               <button type="button" className={styles.shuffle} disabled={chaos.scrambling} onClick={chaos.run}>
-                {punk ? (chaos.scrambling ? 'SCRAMBLING…' : 'CHAOS PROTOCOL') : 'Shuffle'}{' '}
+                {shuffleLabel}{' '}
                 <span aria-hidden="true">
                   <ArrowIcon direction="shuffle" />
                 </span>
@@ -152,7 +155,7 @@ export function Home() {
           </p>
           {punk && (
             <p className={styles.chaosStatus} role="status">
-              {chaos.scrambling ? '// INJECTING ENTROPY…' : chaos.message || '// CHAOS ENGINE ARMED.'}
+              {chaosStatus}
             </p>
           )}
           <div

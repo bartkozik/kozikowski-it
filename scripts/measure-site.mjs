@@ -79,6 +79,7 @@ export function createMeasurement(report, javascriptGzip, build) {
   const settings = report.configSettings ?? {};
   const viewport = settings.screenEmulation;
   const throttling = settings.throttling;
+  const storageReset = settings.disableStorageReset ? 'disabled' : 'enabled';
   const profile = [
     settings.formFactor ? `${settings.formFactor} profile` : null,
     viewport ? `${viewport.width}×${viewport.height}, DPR ${viewport.deviceScaleFactor}` : null,
@@ -86,9 +87,7 @@ export function createMeasurement(report, javascriptGzip, build) {
     throttling
       ? `${throttling.rttMs} ms RTT, ${throttling.throughputKbps} Kbit/s, CPU ×${throttling.cpuSlowdownMultiplier}`
       : null,
-    typeof settings.disableStorageReset === 'boolean'
-      ? `storage reset ${settings.disableStorageReset ? 'disabled' : 'enabled'}`
-      : null,
+    typeof settings.disableStorageReset === 'boolean' ? `storage reset ${storageReset}` : null,
   ]
     .filter(Boolean)
     .join('; ');

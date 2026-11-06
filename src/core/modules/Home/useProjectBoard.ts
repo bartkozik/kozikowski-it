@@ -44,6 +44,21 @@ const keyboardDirections: Readonly<Record<string, MoveDirection | undefined>> = 
   ArrowDown: 'down',
 };
 
+const arrangementAnnouncements: Record<ProjectFilter, { selected: string; shuffled: string }> = {
+  original: {
+    selected: 'All projects shown. Original layout restored.',
+    shuffled: 'All projects shuffled.',
+  },
+  loved: {
+    selected: 'Showing 3 projects: EPOCA, Board.Dev and PM Traffic Manager.',
+    shuffled: 'Most loved projects shuffled. Filter remains active.',
+  },
+  painful: {
+    selected: 'Showing 2 projects: Ad Template Platform and Art Network.',
+    shuffled: 'Most painful projects shuffled. Filter remains active.',
+  },
+};
+
 type DragState = {
   index: number;
   pointerId: number;
@@ -58,9 +73,10 @@ function positionsForFilter(mode: Arrangement): readonly CardPosition[] {
   const featured = mode === 'loved' || mode === 'painful' ? projectFilters[mode] : [];
   return cardPresets.map((position) => {
     const rank = featured.indexOf(position.slug);
-    return rank < 0
-      ? position
-      : { ...position, x: 60 + rank * 330, y: rank === 1 ? 150 : 70, rotation: rank === 1 ? 4 : -3 };
+    if (rank < 0) return position;
+    const y = rank === 1 ? 150 : 70;
+    const rotation = rank === 1 ? 4 : -3;
+    return { ...position, x: 60 + rank * 330, y, rotation };
   });
 }
 
@@ -288,19 +304,9 @@ export function useProjectBoard() {
         ...featured.map((slug) => cardPresets.findIndex((card) => card.slug === slug)),
       ]);
     }
-    setAnnouncement(
-      requested === 'shuffle'
-        ? mode === 'loved'
-          ? 'Most loved projects shuffled. Filter remains active.'
-          : mode === 'painful'
-            ? 'Most painful projects shuffled. Filter remains active.'
-            : 'All projects shuffled.'
-        : mode === 'original'
-          ? 'All projects shown. Original layout restored.'
-          : mode === 'loved'
-            ? 'Showing 3 projects: EPOCA, Board.Dev and PM Traffic Manager.'
-            : 'Showing 2 projects: Ad Template Platform and Art Network.',
-    );
+    const filter = mode === 'shuffle' ? 'original' : mode;
+    const action = requested === 'shuffle' ? 'shuffled' : 'selected';
+    setAnnouncement(arrangementAnnouncements[filter][action]);
   }
 
   return {

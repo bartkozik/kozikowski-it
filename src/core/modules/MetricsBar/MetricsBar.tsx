@@ -10,6 +10,7 @@ import { getMetricsCopy, getMetricDescription } from '@/core/content/metrics-cop
 import { siteMetricDefinitions, type SiteMetricDefinition } from '@/core/content/site-metrics';
 
 import { formatMetricValue } from './metric-format';
+import { MeasurementTime } from './MeasurementTime';
 import { useVisitorMetrics } from './use-visitor-metrics';
 import { advanceTicker, tooltipLeft } from './ticker-layout';
 import styles from './MetricsBar.module.scss';
@@ -200,11 +201,7 @@ export function MetricsBar() {
             <div>
               <dt>{copy.measured}</dt>
               <dd>
-                {recordedAt ? (
-                  <time dateTime={new Date(recordedAt).toISOString()}>{new Date(recordedAt).toLocaleString()}</time>
-                ) : (
-                  copy.unrecorded
-                )}
+                <MeasurementTime timestamp={recordedAt || null} fallback={copy.unrecorded} />
               </dd>
             </div>
             {value !== null && (

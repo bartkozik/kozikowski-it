@@ -69,6 +69,13 @@ export function shuffledPositions(
 
 export type MoveDirection = 'left' | 'right' | 'up' | 'down';
 
+const moveOffsets: Readonly<Record<MoveDirection, { x: number; y: number }>> = {
+  left: { x: -1, y: 0 },
+  right: { x: 1, y: 0 },
+  up: { x: 0, y: -1 },
+  down: { x: 0, y: 1 },
+};
+
 export function nudgePosition(
   position: CardPosition,
   direction: MoveDirection,
@@ -76,11 +83,12 @@ export function nudgePosition(
   boardHeight: number,
   step = 20,
 ): CardPosition {
+  const offset = moveOffsets[direction];
   const next = constrainPosition(
     {
       ...position,
-      x: position.x + (direction === 'right' ? step : direction === 'left' ? -step : 0),
-      y: position.y + (direction === 'down' ? step : direction === 'up' ? -step : 0),
+      x: position.x + offset.x * step,
+      y: position.y + offset.y * step,
     },
     size.width,
     size.height,
