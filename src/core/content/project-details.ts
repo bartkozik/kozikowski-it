@@ -43,7 +43,7 @@ export const projectDetails: readonly ProjectDetails[] = [
     challenge:
       'Make detailed work records and configurable reports understandable while keeping permissions, correction history and interface state consistent with the existing API.',
     status:
-      'Commercial product with a separate guest demo using fictional data. Choose “Open demo” to enter as the workspace Owner, without creating an account. Explore a fictional five-person team, three clients, five projects and four weeks of time entries and reports. “Reset demo” restores your own sample workspace; sessions expire within 24 hours. Company login, invitations, uploads, exports and external integrations are unavailable. Do not enter personal or confidential information. Public frontend and backend snapshots preserve the application and team contributions.',
+      'Commercial product with a separate guest demo using fictional data. Choose “Open demo” to enter as the workspace Owner, without creating an account. Explore a fictional five-person team, three clients, five projects and four weeks of time entries and reports. “Reset demo” restores your own sample workspace; sessions expire within 24 hours. Team settings lets you explore the fictional team and project assignments, with read-only previews of company login, invitations and integrations. External connections, sending invitations, uploads and exports are disabled. Do not enter personal or confidential information. Public frontend and backend snapshots preserve the application and team contributions.',
   },
   {
     slug: 'celina',
