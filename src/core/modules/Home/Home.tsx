@@ -13,6 +13,7 @@ import { projects } from '@/core/content/projects';
 
 import { cardPresets } from './card-presets';
 import { ProjectCard } from './ProjectCard';
+import { ProjectFilters } from './ProjectFilters';
 import { useProjectBoard } from './useProjectBoard';
 import { useChaosShuffle } from './useChaosShuffle';
 import styles from './Home.module.scss';
@@ -30,8 +31,7 @@ export function Home() {
     entranceComplete,
     highlightedProject,
     canvas,
-    setHoveredProject,
-    setFocusedProject,
+    getHighlightHandlers,
     arrange,
   } = board;
   const chaos = useChaosShuffle(punk, canvas, () => arrange('shuffle'));
@@ -57,14 +57,7 @@ export function Home() {
                   <Link
                     href={`/projects/${project.slug}`}
                     data-highlighted={highlightedProject === project.slug || undefined}
-                    onPointerEnter={(event) => {
-                      if (event.pointerType !== 'touch') setHoveredProject(project.slug);
-                    }}
-                    onPointerLeave={() => setHoveredProject(null)}
-                    onFocus={(event) => {
-                      if (event.currentTarget.matches(':focus-visible')) setFocusedProject(project.slug);
-                    }}
-                    onBlur={() => setFocusedProject(null)}
+                    {...getHighlightHandlers(project.slug)}
                   >
                     {project.name}
                     <span aria-hidden="true">
@@ -95,41 +88,13 @@ export function Home() {
         <section className={styles.board} aria-label="Project cards" id="projects">
           <div className={styles.toolbar}>
             <div className={styles.sortButtons}>
-              <button
-                type="button"
-                aria-pressed={arrangement === 'original' || arrangement === 'shuffle'}
+              <ProjectFilters
+                arrangement={arrangement}
                 disabled={chaos.scrambling}
-                onPointerEnter={(event) => previewFilter(event, 'original')}
-                onPointerLeave={clearFilterPreview}
-                onPointerCancel={clearFilterPreview}
-                onClick={() => arrange('original')}
-              >
-                All
-              </button>
-              <button
-                type="button"
-                aria-pressed={arrangement === 'loved'}
-                title="EPOCA, Board.Dev and PM Traffic Manager"
-                disabled={chaos.scrambling}
-                onPointerEnter={(event) => previewFilter(event, 'loved')}
-                onPointerLeave={clearFilterPreview}
-                onPointerCancel={clearFilterPreview}
-                onClick={() => arrange('loved')}
-              >
-                Most loved
-              </button>
-              <button
-                type="button"
-                aria-pressed={arrangement === 'painful'}
-                title="Ad Template Platform and Art Network"
-                disabled={chaos.scrambling}
-                onPointerEnter={(event) => previewFilter(event, 'painful')}
-                onPointerLeave={clearFilterPreview}
-                onPointerCancel={clearFilterPreview}
-                onClick={() => arrange('painful')}
-              >
-                Most painful
-              </button>
+                onPreview={previewFilter}
+                onPreviewEnd={clearFilterPreview}
+                onSelect={arrange}
+              />
               <button type="button" className={styles.shuffle} disabled={chaos.scrambling} onClick={chaos.run}>
                 {punk ? (chaos.scrambling ? 'SCRAMBLING…' : 'CHAOS PROTOCOL') : 'Shuffle'}{' '}
                 <span aria-hidden="true">
