@@ -6,6 +6,7 @@ import { ModeCopy } from '@/core/modules/Experience/ModeCopy';
 
 import { AboutPortrait } from './AboutPortrait';
 import { ProfileLinks } from './ProfileLinks';
+import { ExperienceList } from './ExperienceList';
 import { ProfilePageShell } from './ProfilePageShell';
 import styles from './ProfilePages.module.scss';
 
@@ -31,20 +32,7 @@ export function About() {
         <h2 id="experience-heading">
           <ModeCopy punk="Origin story & contract log">From business to building</ModeCopy>
         </h2>
-        <div className={styles.experience}>
-          {profile.experience.map((experience) => (
-            <article key={experience.company} className={styles.experienceItem}>
-              <p className={styles.eyebrow}>{experience.period}</p>
-              <h3>{experience.company}</h3>
-              <p className={styles.role}>{experience.title}</p>
-              <p>
-                <ModeCopy punk={punkProfileCopy.experience[experience.company]?.description}>
-                  {experience.description}
-                </ModeCopy>
-              </p>
-            </article>
-          ))}
-        </div>
+        <ExperienceList items={profile.experience} variant="summary" />
       </section>
 
       <section className={styles.section} aria-labelledby="outside-work-heading">

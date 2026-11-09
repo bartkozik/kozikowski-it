@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, type RefObject } from 'react';
 import { flushSync } from 'react-dom';
 
+import { desktopBoard, reducedMotion } from '@/core/browser/media-queries';
+
 const messages = [
   'ORDER IS A CORPORATE CONSTRUCT.',
   'REALITY RECOMPILED. 0 WARRANTIES.',
@@ -13,20 +15,18 @@ export function useChaosShuffle(enabled: boolean, canvas: RefObject<HTMLDivEleme
   const active = useRef<Animation[] | null>(null);
 
   useEffect(() => {
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const desktop = window.matchMedia('(min-width: 1100px) and (pointer: fine)');
     function cancel() {
       active.current?.forEach((animation) => animation.cancel());
     }
     function preferenceChanged() {
-      if (reducedMotion.matches || !desktop.matches) cancel();
+      if (reducedMotion.getSnapshot() || !desktopBoard.getSnapshot()) cancel();
     }
-    reducedMotion.addEventListener('change', preferenceChanged);
-    desktop.addEventListener('change', preferenceChanged);
+    const unsubscribeMotion = reducedMotion.subscribe(preferenceChanged);
+    const unsubscribeDesktop = desktopBoard.subscribe(preferenceChanged);
     return () => {
       cancel();
-      reducedMotion.removeEventListener('change', preferenceChanged);
-      desktop.removeEventListener('change', preferenceChanged);
+      unsubscribeMotion();
+      unsubscribeDesktop();
     };
   }, [enabled]);
 
@@ -37,7 +37,7 @@ export function useChaosShuffle(enabled: boolean, canvas: RefObject<HTMLDivEleme
       return;
     }
     const nextMessage = messages[Math.floor(Math.random() * messages.length)];
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (reducedMotion.getSnapshot()) {
       shuffle();
       setMessage(nextMessage);
       return;

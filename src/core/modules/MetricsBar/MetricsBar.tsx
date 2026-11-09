@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useEffect, useId, useRef, useState } from 'react';
 
 import { useExperience } from '@/core/modules/Experience/ExperienceProvider';
+import { reducedMotion } from '@/core/browser/media-queries';
 import { getMetricsCopy, getMetricDescription } from '@/core/content/metrics-copy';
 import { siteMetricDefinitions, type SiteMetricDefinition } from '@/core/content/site-metrics';
 
@@ -34,7 +35,6 @@ export function MetricsBar() {
     const area = viewport.current;
     const group = cycle.current;
     if (!area || !group) return;
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let frame = 0;
     let previousTime = 0;
     let position = area.scrollLeft;
@@ -57,14 +57,14 @@ export function MetricsBar() {
       window.cancelAnimationFrame(frame);
       previousTime = 0;
       position = area!.scrollLeft;
-      if (!paused && !reducedMotion.matches) frame = window.requestAnimationFrame(step);
+      if (!paused && !reducedMotion.getSnapshot()) frame = window.requestAnimationFrame(step);
     }
 
-    reducedMotion.addEventListener('change', updatePlayback);
+    const unsubscribe = reducedMotion.subscribe(updatePlayback);
     updatePlayback();
     return () => {
       window.cancelAnimationFrame(frame);
-      reducedMotion.removeEventListener('change', updatePlayback);
+      unsubscribe();
       observer.disconnect();
     };
   }, [paused]);

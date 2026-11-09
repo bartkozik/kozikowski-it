@@ -30,8 +30,7 @@ export function ProjectCard({ project, index, board }: ProjectCardProps) {
     visibleArrangement,
     registerCard,
     setEntranceComplete,
-    setHoveredProject,
-    setFocusedProject,
+    getHighlightHandlers,
     bringToFront,
     beginDrag,
     moveCard,
@@ -39,6 +38,7 @@ export function ProjectCard({ project, index, board }: ProjectCardProps) {
     keyboardMove,
     clickGuard,
   } = board;
+  const highlightHandlers = getHighlightHandlers(project.slug);
   const preset = cardPresets[index];
   const visual = getProjectVisual(project.slug);
   const position = positions[index];
@@ -67,16 +67,11 @@ export function ProjectCard({ project, index, board }: ProjectCardProps) {
           if (event.target === event.currentTarget && index === cardPresets.length - 1) setEntranceComplete(true);
         }}
         data-muted={(highlightedProject !== null && highlightedProject !== project.slug) || undefined}
-        onPointerEnter={(event) => {
-          if (event.pointerType !== 'touch') setHoveredProject(project.slug);
-        }}
-        onPointerLeave={() => setHoveredProject(null)}
+        {...highlightHandlers}
         onFocus={(event) => {
           bringToFront(index);
-          if (event.target instanceof HTMLElement && event.target.matches(':focus-visible'))
-            setFocusedProject(project.slug);
+          highlightHandlers.onFocus(event);
         }}
-        onBlur={() => setFocusedProject(null)}
       >
         <div className={styles.cardHeader}>
           <ViewTransition name={`project-title-${project.slug}`} share="project-title" default="none">
