@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
+import { mobileViewport } from '@/core/browser/media-queries';
 import { ModeSwitch } from '@/core/modules/Experience/ModeSwitch';
 
-import { mobileViewportQuery } from './useMobileViewport';
 import styles from './PortfolioNavigation.module.scss';
 
 const sections = [
@@ -35,21 +35,19 @@ export function PortfolioNavigation() {
     if (menu.current) menu.current.open = false;
     if (!pendingNavigation.current) return;
     pendingNavigation.current = false;
-    if (!window.matchMedia(mobileViewportQuery).matches) return;
+    if (!mobileViewport.getSnapshot()) return;
     document.getElementById('main-content')?.focus({ preventScroll: true });
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [pathname]);
 
   useEffect(() => {
-    const query = window.matchMedia(mobileViewportQuery);
     function closeOnDesktop() {
-      if (query.matches || !menu.current) return;
+      if (mobileViewport.getSnapshot() || !menu.current) return;
       const hadFocus = menu.current.contains(document.activeElement);
       menu.current.open = false;
       if (hadFocus) document.getElementById('main-content')?.focus({ preventScroll: true });
     }
-    query.addEventListener('change', closeOnDesktop);
-    return () => query.removeEventListener('change', closeOnDesktop);
+    return mobileViewport.subscribe(closeOnDesktop);
   }, []);
 
   return (

@@ -4,6 +4,7 @@ import { punkProfileCopy } from '@/core/content/punk-profile-copy';
 import { ModeCopy } from '@/core/modules/Experience/ModeCopy';
 
 import { ProfileLinks } from './ProfileLinks';
+import { ExperienceList } from './ExperienceList';
 import { ProfilePageShell } from './ProfilePageShell';
 import styles from './ProfilePages.module.scss';
 
@@ -47,31 +48,7 @@ export function Resume() {
         <h2 id="resume-experience-heading">
           <ModeCopy punk="Contract history">Experience</ModeCopy>
         </h2>
-        <div className={styles.experience}>
-          {profile.experience.map((experience) => (
-            <article key={experience.company} className={styles.experienceItem}>
-              <div className={styles.experienceHeading}>
-                <h3>{experience.company}</h3>
-                <p className={styles.eyebrow}>{experience.period}</p>
-              </div>
-              <p className={styles.role}>{experience.title}</p>
-              <p>
-                <ModeCopy punk={punkProfileCopy.experience[experience.company]?.description}>
-                  {experience.description}
-                </ModeCopy>
-              </p>
-              <ul className={styles.highlights}>
-                {experience.highlights.map((highlight, index) => (
-                  <li key={highlight}>
-                    <ModeCopy punk={punkProfileCopy.experience[experience.company]?.highlights[index]}>
-                      {highlight}
-                    </ModeCopy>
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
-        </div>
+        <ExperienceList items={profile.experience} variant="detailed" />
       </section>
 
       <section className={styles.section} aria-labelledby="skills-heading">

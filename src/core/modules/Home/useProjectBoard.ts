@@ -9,6 +9,8 @@ import {
   type SetStateAction,
 } from 'react';
 
+import { desktopBoard } from '@/core/browser/media-queries';
+
 import {
   BOARD_WIDTH,
   BOARD_HEIGHT,
@@ -35,8 +37,8 @@ import {
   type ProjectFilter,
 } from './project-filters';
 import { createDragClickGuard } from './drag-click-guard';
+import { useProjectHighlight } from './useProjectHighlight';
 
-const desktopBoardQuery = '(min-width: 1100px) and (pointer: fine)';
 const keyboardDirections: Readonly<Record<string, MoveDirection | undefined>> = {
   ArrowLeft: 'left',
   ArrowRight: 'right',
@@ -97,9 +99,8 @@ export function useProjectBoard() {
   const visibleArrangement = filterState.preview ?? arrangement;
   const [announcement, setAnnouncement] = useState('');
   const [entranceComplete, setEntranceComplete] = useState(false);
-  const [hoveredProject, setHoveredProject] = useState<string | null>(null);
-  const [focusedProject, setFocusedProject] = useState<string | null>(null);
-  const highlightCandidate = focusedProject ?? hoveredProject;
+  const highlight = useProjectHighlight();
+  const highlightCandidate = highlight.project;
   const highlightedProject =
     highlightCandidate && isProjectVisible(highlightCandidate, visibleArrangement) ? highlightCandidate : null;
   const drag = useRef<DragState | null>(null);
@@ -126,12 +127,11 @@ export function useProjectBoard() {
   useEffect(() => {
     const stage = canvas.current;
     if (!stage) return;
-    const desktop = window.matchMedia(desktopBoardQuery);
     let frame = 0;
 
     function measure() {
       frame = 0;
-      if (!desktop.matches) return;
+      if (!desktopBoard.getSnapshot()) return;
       const measurement = measureCards();
       if (measurement) {
         setLayout((current) => resizeLayout(current, cardPresets, measurement.dimensions, measurement.height));
@@ -147,12 +147,12 @@ export function useProjectBoard() {
     cards.current.forEach((card) => {
       if (card) observer.observe(card);
     });
-    desktop.addEventListener('change', scheduleMeasurement);
+    const unsubscribe = desktopBoard.subscribe(scheduleMeasurement);
     scheduleMeasurement();
 
     return () => {
       observer.disconnect();
-      desktop.removeEventListener('change', scheduleMeasurement);
+      unsubscribe();
       if (frame) window.cancelAnimationFrame(frame);
     };
   }, [measureCards]);
@@ -168,7 +168,7 @@ export function useProjectBoard() {
   function beginDrag(event: PointerEvent<HTMLAnchorElement>, index: number) {
     setEntranceComplete(true);
     clickGuard.reset();
-    if (event.button !== 0 || !window.matchMedia(desktopBoardQuery).matches) return;
+    if (event.button !== 0 || !desktopBoard.getSnapshot()) return;
     const measurement = measureCards();
     if (!measurement) return;
     bringToFront(index);
@@ -230,7 +230,7 @@ export function useProjectBoard() {
   }
 
   function nudgeCard(index: number, direction: MoveDirection, step = 20) {
-    if (!window.matchMedia(desktopBoardQuery).matches) return;
+    if (!desktopBoard.getSnapshot()) return;
     const measurement = measureCards();
     const size = measurement?.dimensions[index];
     if (!size) return;
@@ -246,7 +246,7 @@ export function useProjectBoard() {
 
   function keyboardMove(event: KeyboardEvent<HTMLAnchorElement>, index: number) {
     const direction = keyboardDirections[event.key];
-    if (!direction || !window.matchMedia(desktopBoardQuery).matches) return;
+    if (!direction || !desktopBoard.getSnapshot()) return;
     event.preventDefault();
     nudgeCard(index, direction, event.shiftKey ? 60 : 20);
   }
@@ -255,7 +255,7 @@ export function useProjectBoard() {
     if (event.pointerType !== 'mouse') return;
     setEntranceComplete(true);
     const arranged = positionsForFilter(filter);
-    const measurement = window.matchMedia(desktopBoardQuery).matches ? measureCards() : null;
+    const measurement = desktopBoard.getSnapshot() ? measureCards() : null;
     setPreviewPositions(
       measurement ? constrainPositions(arranged, measurement.dimensions, measurement.height) : arranged,
     );
@@ -269,10 +269,9 @@ export function useProjectBoard() {
   function arrange(requested: Arrangement) {
     const mode = nextArrangement(arrangement, requested);
     setEntranceComplete(true);
-    const measurement = window.matchMedia(desktopBoardQuery).matches ? measureCards() : null;
+    const measurement = desktopBoard.getSnapshot() ? measureCards() : null;
     dispatchFilter({ type: 'select', arrangement: requested });
-    setHoveredProject(null);
-    setFocusedProject(null);
+    highlight.clear();
     if (requested === 'shuffle') {
       const visibleIndices = cardPresets.flatMap((card, index) => (isProjectVisible(card.slug, mode) ? [index] : []));
       if (measurement) {
@@ -324,8 +323,7 @@ export function useProjectBoard() {
     registerCard,
     clickGuard,
     setEntranceComplete,
-    setHoveredProject,
-    setFocusedProject,
+    getHighlightHandlers: highlight.getHandlers,
     bringToFront,
     beginDrag,
     moveCard,
