@@ -39,11 +39,13 @@ export interface PortfolioProfile {
   readonly links: readonly ProfileLink[];
 }
 
+const contactEmail = 'bartosz@kozikowski.it';
+
 export const profile: PortfolioProfile = {
   name: 'Bartosz Kozikowski',
   title: 'Full Stack Developer',
-  email: 'kozikowskib@gmail.com',
-  contactHref: 'mailto:kozikowskib@gmail.com',
+  email: contactEmail,
+  contactHref: `mailto:${contactEmail}`,
   location: 'Warsaw, Poland',
   availability: 'Remote worldwide or hybrid in Warsaw',
   english: 'C1',
