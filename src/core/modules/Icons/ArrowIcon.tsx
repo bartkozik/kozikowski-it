@@ -13,7 +13,16 @@ interface ArrowIconProps {
   readonly size?: number;
 }
 
+function getArrowPath(direction: NonNullable<ArrowIconProps['direction']>) {
+  if (direction === 'shuffle') {
+    return { d: 'M4 7h3c4 0 6 10 10 10h3m-4-4 4 4-4 4M4 17h3c4 0 6-10 10-10h3m-4-4 4 4-4 4' };
+  }
+  if (direction === 'reset') return { d: 'M20 8a8 8 0 1 0 0 8M20 3v5h-5' };
+  return { d: 'M6 18 18 6M9 6h9v9', transform: `rotate(${rotations[direction]} 12 12)` };
+}
+
 export function ArrowIcon({ direction = 'up-right', size = 24 }: ArrowIconProps) {
+  const path = getArrowPath(direction);
   return (
     <svg
       className={styles.icon}
@@ -29,13 +38,7 @@ export function ArrowIcon({ direction = 'up-right', size = 24 }: ArrowIconProps)
       aria-hidden="true"
       focusable="false"
     >
-      {direction === 'shuffle' ? (
-        <path d="M4 7h3c4 0 6 10 10 10h3m-4-4 4 4-4 4M4 17h3c4 0 6-10 10-10h3m-4-4 4 4-4 4" />
-      ) : direction === 'reset' ? (
-        <path d="M20 8a8 8 0 1 0 0 8M20 3v5h-5" />
-      ) : (
-        <path d="M6 18 18 6M9 6h9v9" transform={`rotate(${rotations[direction]} 12 12)`} />
-      )}
+      <path {...path} />
     </svg>
   );
 }

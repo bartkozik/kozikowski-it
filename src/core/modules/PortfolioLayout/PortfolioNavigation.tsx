@@ -16,6 +16,12 @@ const sections = [
   { href: '/contact', label: 'Contact' },
 ];
 
+function getAriaCurrent(pathname: string, href: string, activeHref: string | undefined) {
+  if (pathname === href) return 'page';
+  if (activeHref === href) return 'location';
+  return undefined;
+}
+
 export function PortfolioNavigation() {
   const pathname = usePathname();
   const menu = useRef<HTMLDetailsElement>(null);
@@ -68,21 +74,24 @@ export function PortfolioNavigation() {
         </summary>
         <div className={styles.panel}>
           <nav className={styles.navigation} aria-label="Portfolio sections">
-            {sections.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                aria-current={pathname === href ? 'page' : activeSection?.href === href ? 'location' : undefined}
-                scroll={false}
-                onNavigate={() => {
-                  pendingNavigation.current = pathname !== href;
-                  if (menu.current) menu.current.open = false;
-                  if (pathname === href) trigger.current?.focus();
-                }}
-              >
-                {label}
-              </Link>
-            ))}
+            {sections.map(({ href, label }) => {
+              const ariaCurrent = getAriaCurrent(pathname, href, activeSection?.href);
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  aria-current={ariaCurrent}
+                  scroll={false}
+                  onNavigate={() => {
+                    pendingNavigation.current = pathname !== href;
+                    if (menu.current) menu.current.open = false;
+                    if (pathname === href) trigger.current?.focus();
+                  }}
+                >
+                  {label}
+                </Link>
+              );
+            })}
           </nav>
           <ModeSwitch embedded />
         </div>
